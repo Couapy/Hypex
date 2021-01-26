@@ -95,35 +95,15 @@ public abstract class Game implements Runnable {
     protected boolean canMove = false;
 
     /**
-     * Refresh rate of the game per second.
+     * Useful for limit the refresh rate of the game.
      */
-    private int refreshRate;
-
-    /**
-     * Last refreshRateMesured.
-     */
-    private int refreshRateMesured;
-
-    /**
-     * Last time we mesured the refresh rate.
-     */
-    private long lastRefreshMesure;
-
-    /**
-     * Number of refresh iterations during the last second. 
-     */
-    private int currentRefreshRate;
-
-    /**
-     * Duration for one refresh.
-     */
-    private long refreshDuration;
+    private Timer timer;
 
     /**
      * Create a new game.
      */
     public Game(int refreshRate) {
-        setRefreshRate(refreshRate);
+        timer = new Timer(refreshRate);
         Thread thread = new Thread(this);
         thread.start();
     }
@@ -144,7 +124,7 @@ public abstract class Game implements Runnable {
         running = true;
 
         while (running) {
-            waitRefreshRate();
+            timer.limitRefreshRate();
             
             if (state == GameState.STARTING) {
                 handleStateStarting();
@@ -158,26 +138,6 @@ public abstract class Game implements Runnable {
 
         }
         System.out.println("[INFO][CORE] Game thread ended.");
-    }
-
-    /**
-     * Limit the refresh rate.
-     */
-    private void waitRefreshRate() {
-        if (System.currentTimeMillis() >= lastRefreshMesure + 1_000l) {
-            refreshRateMesured = currentRefreshRate;
-            currentRefreshRate = 0;
-            lastRefreshMesure = System.currentTimeMillis();
-            System.out.println("[INFO][CORE] " + refreshRateMesured  + " / " + refreshRate);
-        }
-        else {
-            currentRefreshRate++;
-        }
-        try {
-            Thread.sleep(refreshDuration);
-        } catch (InterruptedException e) {
-        }
-
     }
 
     /**
@@ -258,15 +218,6 @@ public abstract class Game implements Runnable {
      */
     private boolean isGameEnded() {
         return round >= maxRounds; // TODO
-    }
-
-    /**
-     * Defines the refresh rate of the game.
-     * @param refreshRate
-     */
-    private void setRefreshRate(int refreshRate) {
-        this.refreshRate = refreshRate;
-        this.refreshDuration = 1000 / refreshRate;
     }
 
 }
