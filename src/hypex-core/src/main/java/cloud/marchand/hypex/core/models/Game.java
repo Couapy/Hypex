@@ -13,6 +13,11 @@ import cloud.marchand.hypex.core.interfaces.PlayerInterface;
 public abstract class Game implements Runnable {
 
     /**
+     * Default refresh rate.
+     */
+    private static final int DEFAULT_REFRESH_RATE = 64;
+
+    /**
      * State of the game.
      * 
      * @see cloud.marchand.hypex.core.enumerations.GameState
@@ -98,6 +103,10 @@ public abstract class Game implements Runnable {
      * Useful for limit the refresh rate of the game.
      */
     private Timer timer;
+
+    public Game() {
+        this(DEFAULT_REFRESH_RATE);
+    }
 
     /**
      * Create a new game.
