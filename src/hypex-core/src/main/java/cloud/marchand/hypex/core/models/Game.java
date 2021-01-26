@@ -197,7 +197,7 @@ public abstract class Game implements Runnable {
     private void setState(GameState gameState) {
         startRound = System.currentTimeMillis();
         state = gameState;
-        System.out.println("[INFO][CORE] Game changed state : " + gameState);
+        System.out.println("[INFO][CORE][" + timer.getCurrentRefreshRate() + "] Game changed state : " + gameState);
 
         if (gameState == GameState.RUNNING) {
             round++;
