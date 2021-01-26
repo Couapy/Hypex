@@ -2,8 +2,8 @@
 
 Build status for `main` and `dev` branches :
 
-![Build](https://github.com/Couapy/Hypex3/workflows/Build/badge.svg?branch=dependabot%2Fmaven%2Fsrc%2Fjunit-junit-4.13.1)
-![Build](https://github.com/Couapy/Hypex3/workflows/Build/badge.svg?branch=dependabot%2Fmaven%2Fsrc%2Fjunit-junit-4.13.1)
+![Build](https://github.com/Couapy/hypex/workflows/Build/badge.svg)
+![Build](https://github.com/Couapy/hypex/workflows/Build/badge.svg?branch=dev)
 
 This is a 2D game rendered in 3D.
 ## Presentation
