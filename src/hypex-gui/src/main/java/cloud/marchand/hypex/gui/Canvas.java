@@ -8,17 +8,41 @@ import javax.swing.JPanel;
 
 import cloud.marchand.hypex.gui.map.Map;
 
+/**
+ * Drawing surface.
+ */
 @SuppressWarnings("serial")
 public class Canvas extends JPanel {
 
+    /**
+     * Number of pixel for drawing a point.
+     */
     private static final int POINT_WIDTH = 10;
+
+    /**
+     * Number of pixels displayed for one unit.
+     */
     public static final int WIDTH_SQUARE = 100;
+
+    /**
+     * Map to display.
+     */
     private Map map;
 
+    /**
+     * Instanciate a canvas.
+     * 
+     * @param map map to display
+     */
     public Canvas(Map map) {
         this.map = map;
     }
 
+    /**
+     * Draw edges, and visible zones.
+     * 
+     * @param graphics graphics zone
+     */
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);

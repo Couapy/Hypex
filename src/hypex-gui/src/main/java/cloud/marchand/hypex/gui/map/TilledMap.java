@@ -12,15 +12,15 @@ import cloud.marchand.hypex.gui.Edge;
  * Represent a tilled Map.
  */
 public class TilledMap extends Map {
-
     /**
      * Cell structure.
      */
     private class Cell {
         public Cell(boolean wall) {
             this.wall = wall;
-		}
-		public boolean wall;
+        }
+
+        public boolean wall;
         public Edge topEdge;
         public Edge bottomEdge;
         public Edge leftEdge;
@@ -29,6 +29,7 @@ public class TilledMap extends Map {
 
     /**
      * Load TilledMap from file
+     * 
      * @param file file path
      * @throws IOException the file doesn't exists
      */
@@ -41,6 +42,7 @@ public class TilledMap extends Map {
 
     /**
      * Read the file
+     * 
      * @param file file path
      * @return tilled map
      * @throws IOException the file doesn't exists
@@ -87,6 +89,7 @@ public class TilledMap extends Map {
 
     /**
      * Merge together edges that need
+     * 
      * @param map tilled map
      */
     private void generateEdges(Cell[][] map) {
@@ -139,6 +142,7 @@ public class TilledMap extends Map {
 
     /**
      * Save edges and nodes in the TilledMap object.
+     * 
      * @param map tilled map
      */
     private void readData(Cell[][] map) {
