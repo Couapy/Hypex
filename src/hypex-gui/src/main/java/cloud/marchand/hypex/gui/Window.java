@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import cloud.marchand.hypex.core.models.Timer;
 import cloud.marchand.hypex.gui.controller.ResizeController;
+import cloud.marchand.hypex.gui.map.Map;
 
 
 @SuppressWarnings("serial")
@@ -28,7 +29,6 @@ public class Window extends JFrame implements Runnable {
     private void initialize() {
         // Configuration
         setTitle("Map Visualizer");
-        setSize(new Dimension(map.getWidth() * (Canvas.WIDTH_SQUARE), map.getHeight() * (Canvas.WIDTH_SQUARE)));
         setSize(new Dimension(1440, 1024));
         setLayout(null);
         setResizable(true);

@@ -2,8 +2,11 @@ package cloud.marchand.hypex.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Set;
 
 import javax.swing.JPanel;
+
+import cloud.marchand.hypex.gui.map.Map;
 
 @SuppressWarnings("serial")
 public class Canvas extends JPanel {
@@ -21,28 +24,17 @@ public class Canvas extends JPanel {
         super.paintComponent(graphics);
         setBackground(Color.BLACK);
 
-        // Paint walls
-        graphics.setColor(Color.BLUE);
-        boolean[][] walls = map.getMap();
-        for (int x = 0; x < walls.length; x++) {
-            for (int y = 0; y < walls[0].length; y++) {
-                if (walls[x][y]) {
-                    graphics.fillRect(x * WIDTH_SQUARE, y * WIDTH_SQUARE, WIDTH_SQUARE, WIDTH_SQUARE);
-                }
-            }
-        }
-
         // Paint edges and nodes
-        Edge[] edges = map.getEdges();
-        for (int i = 0; i < edges.length; i++) {
+        Set<Edge> edges = map.getEdges();
+        for (Edge edge : edges) {
             graphics.setColor(Color.GREEN);
-            graphics.drawLine((int) edges[i].getA().getX() * WIDTH_SQUARE, (int) edges[i].getA().getY() * WIDTH_SQUARE,
-                    (int) edges[i].getB().getX() * WIDTH_SQUARE, (int) edges[i].getB().getY() * WIDTH_SQUARE);
+            graphics.drawLine((int) edge.getA().getX() * WIDTH_SQUARE, (int) edge.getA().getY() * WIDTH_SQUARE,
+                    (int) edge.getB().getX() * WIDTH_SQUARE, (int) edge.getB().getY() * WIDTH_SQUARE);
             graphics.setColor(Color.RED);
-            graphics.fillOval((int) (edges[i].getA().getX() * WIDTH_SQUARE - POINT_WIDTH / 2),
-                    (int) (edges[i].getA().getY() * WIDTH_SQUARE - POINT_WIDTH / 2), POINT_WIDTH, POINT_WIDTH);
-            graphics.fillOval((int) (edges[i].getB().getX() * WIDTH_SQUARE - POINT_WIDTH / 2),
-                    (int) (edges[i].getB().getY() * WIDTH_SQUARE - POINT_WIDTH / 2), POINT_WIDTH, POINT_WIDTH);
+            graphics.fillOval((int) (edge.getA().getX() * WIDTH_SQUARE - POINT_WIDTH / 2),
+                    (int) (edge.getA().getY() * WIDTH_SQUARE - POINT_WIDTH / 2), POINT_WIDTH, POINT_WIDTH);
+            graphics.fillOval((int) (edge.getB().getX() * WIDTH_SQUARE - POINT_WIDTH / 2),
+                    (int) (edge.getB().getY() * WIDTH_SQUARE - POINT_WIDTH / 2), POINT_WIDTH, POINT_WIDTH);
         }
 
     }
