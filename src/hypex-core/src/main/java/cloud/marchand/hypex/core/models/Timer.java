@@ -31,18 +31,33 @@ public class Timer {
     private long refreshDuration;
 
     /**
+     * Indicates if the timer is disabled.
+     */
+    private boolean disabled;
+
+    /**
      * Defines the refresh rate of the game.
-     * @param refreshRate
+     * Set {@link #refreshRate} to 0 or less to disable the limitation.
+     * @param refreshRate refresh rate prefered
      */
     public Timer(int refreshRate) {
-        this.refreshRate = refreshRate;
-        this.refreshDuration = 1000 / refreshRate;
+        if (refreshRate <= 0) {
+            disabled = true;
+        }
+        else {
+            disabled = false;
+            this.refreshRate = refreshRate;
+            this.refreshDuration = 1000 / refreshRate;
+        }
     }
 
     /**
      * Limit the refresh rate.
      */
     public void limitRefreshRate() {
+        if (disabled) {
+            return;
+        }
         if (System.currentTimeMillis() >= lastRefreshMesure + 1_000l) {
             refreshRateMesured = currentRefreshRate;
             currentRefreshRate = 0;

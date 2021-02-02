@@ -79,10 +79,8 @@ public class TilledMap extends Map {
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < maxCols; x++) {
                 Cell cell = new Cell(content.charAt(y * (maxCols + 1) + x) == '*');
-                System.out.print(cell.wall ? "* " : "  ");
                 map[x][y] = cell;
             }
-            System.out.println();
         }
         return map;
     }
