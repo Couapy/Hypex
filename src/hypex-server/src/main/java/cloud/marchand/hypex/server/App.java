@@ -1,13 +1,14 @@
 package cloud.marchand.hypex.server;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+public class App {
+
+    public static void main(String[] args) throws InterruptedException {
+        new Client("localhost", 64128);
+        Server server = new Server(64128);
+
+        Thread.sleep(3000);
+        
+        server.close();
     }
+
 }
