@@ -1,4 +1,4 @@
-package cloud.marchand.hypex.server;
+package cloud.marchand.hypex.server.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,49 +6,87 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import cloud.marchand.hypex.core.models.Game;
+
+/**
+ * Represent a connection with a client.
+ */
 public class Connection extends Thread {
 
+    /**
+     * Identifier of the connection.
+     */
     private static int numberConnections = 0;
 
+    /**
+     * Client socket.
+     */
     private Socket socket;
+
+    /**
+     * Input buffer.
+     */
     private BufferedReader input;
+
+    /**
+     * Output buffer.
+     */
     private PrintStream output;
+
+    /**
+     * Indicates if the connection is active.
+     */
     private boolean active = true;
 
-    public Connection(Socket socket) {
+    /**
+     * Current protocol of communication.
+     */
+    private ProtocolServer protocol;
+    
+    /**
+     * Instanciate the connection, and set up the input and output.
+     * @param socket client socket
+     */
+    public Connection(Socket socket, ProtocolServer protocol) {
         numberConnections++;
         setName("CON#" + numberConnections);
         this.socket = socket;
+        this.protocol = protocol;
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintStream(socket.getOutputStream());
         } catch (IOException e) {
             closeConnection();
         }
+        System.out.println("[INFO][" + getName() + "] " + socket.getInetAddress() + " connected.");
         start();
     }
 
+    /**
+     * Handler data sended.
+     */
     public void run() {
         String data;
-        System.out.println("[INFO][" + getName() + "] Started");
         while (active) {
             try {
                 Thread.sleep(10);
                 while ((data = input.readLine()) != null) {
-                    System.out.println("[INFO][" + getName() + "] > " + data);
-                    if (data.equals("BYE")) {
-                        closeConnection();
-                    }
+                    ProtocolServer.parse(this, data);
                 }
             } catch (InterruptedException e) {
             } catch (IOException e) {
                 closeConnection();
             }
         }
-        System.out.println("[INFO][" + getName() + "] Stopped");
     }
 
+    /**
+     * Close connection with client.
+     */
     public void closeConnection() {
+        if (socket.isClosed()) {
+            return;
+        }
         try {
             input.close();
             output.close();
@@ -58,6 +96,7 @@ public class Connection extends Thread {
         finally {
             active = false;
         }
+        System.out.println("[INFO][" + getName() + "] " + socket.getInetAddress() + " disconnected.");
     }
     
 }

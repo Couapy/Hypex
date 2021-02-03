@@ -1,20 +1,38 @@
-package cloud.marchand.hypex.server;
+package cloud.marchand.hypex.server.client;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
+/**
+ * Network client.
+ */
 public class Client extends Thread {
 
+    /**
+     * Adress of the server.
+     */
     private String address;
+
+    /**
+     * Port of the server.
+     */
     private int port;
 
+    /**
+     * Initialize client.
+     * @param address server address
+     * @param port server port
+     */
     public Client(String address, int port) {
         this.address = address;
         this.port = port;
         start();
     }
 
+    /**
+     * Handle communication channels with the server.
+     */
     public void run() {
         System.out.println("[INFO][CLIENT] Started");
         try {

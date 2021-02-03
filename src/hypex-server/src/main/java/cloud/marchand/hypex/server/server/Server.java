@@ -1,8 +1,11 @@
-package cloud.marchand.hypex.server;
+package cloud.marchand.hypex.server.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import cloud.marchand.hypex.core.models.Game;
+
 
 public class Server extends Thread {
 
@@ -11,8 +14,14 @@ public class Server extends Thread {
     private int port;
     private boolean running = true;
 
-    public Server(int port) {
+    private Game game;
+
+    private ProtocolServer protocol;
+
+    public Server(Game game, int port, ProtocolServer protocol) {
+        this.game = game;
         this.port = port;
+        this.protocol = protocol;
         start();
     }
 
@@ -23,7 +32,7 @@ public class Server extends Thread {
             server = new ServerSocket(port);
             while (running) {
                 Socket socket = server.accept();
-                new Connection(socket);
+                new Connection(socket, protocol);
 			}
             server.close();
         } catch (IOException e) {

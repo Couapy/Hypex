@@ -12,6 +12,7 @@ The following instructions are available :
 * [MOVE](#move)
 * [SELECT](#select)
 * [TEAM](#team)
+* [CONFIGURATION](#configuration)
 
 ### Fire
 
@@ -73,7 +74,7 @@ MOVE:
 
 ```text
 SELECT:0
-SELECT:1
+SELECT:1CONFIGURATION
 SELECT:2
 SELECT:3
 ```
@@ -88,7 +89,7 @@ TEAM:1
 
 ```
 
-### Version
+### Configuration
 
 `CONFIGURATION` instruction is to ask informations about each other.
 
@@ -121,7 +122,6 @@ CONFIGURATION:0.1.O,...
 C> HELLO
 S> NAME:
 C> NAME:albator
-S> 
 C> MOVE:f
 C> MOVE:f;b;l;r
 C> MOVE:
@@ -131,7 +131,5 @@ C> FIRE:off
 
 [...]
 
-C> 
-S> 
 C> BYE
 ```
