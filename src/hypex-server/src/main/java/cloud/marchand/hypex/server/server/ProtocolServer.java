@@ -1,6 +1,12 @@
 package cloud.marchand.hypex.server.server;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import cloud.marchand.hypex.core.interfaces.PlayerInterface;
 import cloud.marchand.hypex.core.models.Game;
+import cloud.marchand.hypex.core.models.Team;
 
 public class ProtocolServer {
 
@@ -10,27 +16,48 @@ public class ProtocolServer {
         this.game = game;
     }
 
-    public static void parse(Connection con, String data) {
+    public void parse(Connection con, String data) {
         String instruction = data.split(":")[0];
+        List<String> arguments = Arrays.asList(data.split(":"));
+
+        PlayerInterface player = con.getPlayer();
 
         switch (instruction) {
             case "FIRE":
-                // TODO
+                if (arguments.get(1).equals("on")) {
+                    player.shoot();
+                }
+                else {
+                    player.unShoot();
+                }
+                if (arguments.get(2).equals("on")) {
+                    player.shootSecondary();
+                }
+                else {
+                    player.unShootSecondary();
+                }
                 break;
             case "NAME":
-                // TODO
+                player.setName(arguments.get(1));
                 break;
             case "MOVE":
-                // TODO
+                player.moveForward(arguments.contains("f"));
+                player.moveBackward(arguments.contains("b"));
+                player.moveLeft(arguments.contains("l"));
+                player.moveRight(arguments.contains("r"));
                 break;
             case "SELECT":
-                // TODO
+                player.changeWeapon(Integer.parseInt(arguments.get(1)));
                 break;
             case "TEAM":
-                // TODO
+                Team team = game.getTeam(Integer.parseInt(arguments.get(1)));
+                if (team != null) {
+                    game.onConnect(player, team);
+                }
                 break;
             case "CONFIGURATION":
                 // TODO
+                con.send("NO_CONFIGURATION_YET");
                 break;
             case "BYE":
                 con.closeConnection();

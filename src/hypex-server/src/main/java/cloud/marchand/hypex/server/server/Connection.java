@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
-import cloud.marchand.hypex.core.models.Game;
+import cloud.marchand.hypex.core.interfaces.PlayerInterface;
 
 /**
  * Represent a connection with a client.
@@ -42,6 +42,11 @@ public class Connection extends Thread {
      * Current protocol of communication.
      */
     private ProtocolServer protocol;
+
+    /**
+     * Player linked to this connection.
+     */
+    private PlayerInterface player;
     
     /**
      * Instanciate the connection, and set up the input and output.
@@ -49,7 +54,7 @@ public class Connection extends Thread {
      */
     public Connection(Socket socket, ProtocolServer protocol) {
         numberConnections++;
-        setName("CON#" + numberConnections);
+        setName("Player#" + numberConnections);
         this.socket = socket;
         this.protocol = protocol;
         try {
@@ -71,13 +76,21 @@ public class Connection extends Thread {
             try {
                 Thread.sleep(10);
                 while ((data = input.readLine()) != null) {
-                    ProtocolServer.parse(this, data);
+                    protocol.parse(this, data);
                 }
             } catch (InterruptedException e) {
             } catch (IOException e) {
                 closeConnection();
             }
         }
+    }
+
+    /**
+     * Send a message through the socket.
+     * @param message message to deliver
+     */
+    public void send(String message) {
+        output.println(message);
     }
 
     /**
@@ -98,5 +111,13 @@ public class Connection extends Thread {
         }
         System.out.println("[INFO][" + getName() + "] " + socket.getInetAddress() + " disconnected.");
     }
+
+    /**
+     * Give the player linked to this connection.
+     * @return player object
+     */
+	public PlayerInterface getPlayer() {
+		return player;
+	}
     
 }
