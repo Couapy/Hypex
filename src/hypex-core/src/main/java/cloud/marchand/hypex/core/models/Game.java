@@ -229,4 +229,34 @@ public abstract class Game implements Runnable {
         return round >= maxRounds; // TODO
     }
 
+	public void onConnect(PlayerInterface player, Team team) {
+        for (Team t : teams) {
+            t.removePlayer(player);
+        }
+        if (teams.contains(team)) {
+            team.addPlayer(player);
+        }
+    }
+
+    public void onDisconnect(PlayerInterface player) {
+        for (Team team : teams) {
+            team.removePlayer(player);
+        }
+    }
+    
+    public void onDeath(PlayerInterface player) {
+        // TODO
+    }
+
+	public Team getTeam(int index) {
+        int i = 0;
+        for (Team team : teams) {
+            if (i == index) {
+                return team;
+            }
+            i++;
+        }
+        return null;
+	}
+
 }
