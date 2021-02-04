@@ -64,5 +64,13 @@ public class Timer {
     public int getCurrentRefreshRate() {
         return currentRefreshRate;
     }
+
+    /**
+     * Give the preferred refresh rate.
+     * @return preferred refresh rate
+     */
+	public double getRefreshRate() {
+		return refreshRate;
+	}
     
 }

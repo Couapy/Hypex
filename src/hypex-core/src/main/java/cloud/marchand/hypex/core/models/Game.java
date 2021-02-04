@@ -24,6 +24,10 @@ public abstract class Game implements Runnable {
      * @see cloud.marchand.hypex.core.enumerations.GameState
      */
     private GameState state;
+
+    /**
+     * Indicates if the game is running.
+     */
     private boolean running = false;
 
     /**
@@ -98,6 +102,9 @@ public abstract class Game implements Runnable {
      */
     private Timer timer;
 
+    /**
+     * Create a default game.
+     */
     public Game() {
         this(DEFAULT_REFRESH_RATE);
     }
@@ -163,7 +170,7 @@ public abstract class Game implements Runnable {
         Iterator<PlayerInterface> playerIterator = players.iterator();
         while (playerIterator.hasNext()) {
             PlayerInterface player = playerIterator.next();
-            player.handleMovements();
+            player.handleMovements(timer.getRefreshRate());
             player.handleWeapon();
         }
     }

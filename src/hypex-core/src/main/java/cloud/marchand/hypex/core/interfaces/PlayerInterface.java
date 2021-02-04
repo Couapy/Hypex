@@ -1,5 +1,6 @@
 package cloud.marchand.hypex.core.interfaces;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,8 @@ import cloud.marchand.hypex.core.enumerations.PlayerState;
 /**
  * Represent a player in the game
  */
-public abstract class PlayerInterface {
+@SuppressWarnings("serial")
+public abstract class PlayerInterface extends Point {
 
     /**
      * Name of the player
@@ -29,6 +31,36 @@ public abstract class PlayerInterface {
      * Current weapon in hand.
      */
     private WeaponInterface handWeapon;
+
+    /**
+     * Distance per second.
+     */
+    private double velocity;
+
+    /**
+     * Look direction.
+     */
+    private double theta;
+    
+    /**
+     * Indicates if the player is moving forward.
+     */
+    private boolean moveForward = false;
+
+    /**
+     * Indicates if the player is moving backward.
+     */
+    private boolean moveBackward = false;
+
+    /**
+     * Indicates if the player is moving to the left.
+     */
+    private boolean moveLeft = false;
+
+    /**
+     * Indicates if the player is moving to the right.
+     */
+    private boolean moveRight = false;
 
     /**
      * Create a player without name, at the origin
@@ -103,10 +135,33 @@ public abstract class PlayerInterface {
     }
 
     /**
-     * Move the player.
+     * Move the player every tick based on player velocity.
      */
-	public void handleMovements() {
-        // TODO
+	public void handleMovements(double refreshRate) {
+        double[] vector = new double[]{0d, 0d};
+        double velocityRated = velocity / refreshRate;
+        double cos = Math.cos(theta);
+        double sin = Math.sin(theta);
+        
+        if (moveForward) {
+            vector[0] += cos;
+            vector[1] += sin;
+        }
+        if (moveBackward) {
+            vector[0] -= cos;
+            vector[1] -= sin;
+        }
+        if (moveLeft) {
+            vector[0] -= sin;
+            vector[1] += cos;
+        }
+        if (moveRight) {
+            vector[0] += sin;
+            vector[1] -= cos;
+        }
+
+        x += vector[0] * velocityRated;
+        y += vector[1] * velocityRated;
 	}
 
     /**
@@ -125,6 +180,38 @@ public abstract class PlayerInterface {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Indicates if the player is moving forward.
+     * @param move true if the player is moving forward
+     */
+    public void moveForward(boolean move) {
+        moveForward = move;
+    }
+
+    /**
+     * Indicates if the player is moving backward.
+     * @param move true if the player is moving backward
+     */
+    public void moveBackward(boolean move) {
+        moveBackward = move;
+    }
+
+    /**
+     * Indicates if the player is moving to the left.
+     * @param move true if the player is moving to the left
+     */
+    public void moveLeft(boolean move) {
+        moveLeft = move;
+    }
+
+    /**
+     * Indicates if the player is moving to the right.
+     * @param move true if the player is moving to the right
+     */
+    public void moveRight(boolean move) {
+        moveRight = move;
     }
 
 }
