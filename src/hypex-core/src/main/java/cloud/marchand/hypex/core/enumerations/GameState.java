@@ -1,7 +1,7 @@
 package cloud.marchand.hypex.core.enumerations;
 
 /**
- * Indicate the game status.
+ * Indicates the game status.
  */
 public enum GameState {
     /**
@@ -17,8 +17,8 @@ public enum GameState {
      */
     ROUND_ENDED,
     /**
-     * The game has just ended. The scores are displayed.
-     * User action is required to restart a new game.
+     * The game has just ended. The scores are displayed. User action is required to
+     * restart a new game.
      */
     ENDED
 }

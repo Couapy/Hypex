@@ -26,6 +26,11 @@ public abstract class PlayerInterface {
     private List<WeaponInterface> weapons = new ArrayList<>();
 
     /**
+     * Current weapon in hand.
+     */
+    private WeaponInterface handWeapon;
+
+    /**
      * Create a player without name, at the origin
      */
     public PlayerInterface() {
@@ -44,18 +49,40 @@ public abstract class PlayerInterface {
      * Shoot the weapon in hand
      */
     public void shoot() {
-        // TODO: shoot()
+        if (handWeapon != null) {
+            handWeapon.shoot();
+        }
     }
 
     /**
      * Make reload the weapon in hand
      */
     public void reload() {
-        // TODO: reload()
+        if (handWeapon != null) {
+            handWeapon.reload();
+        }
     }
 
-    public void changeWeapon() {
-
+    public void changeWeapon(int index) {
+        try {
+            handWeapon = weapons.get(index);
+            handWeapon.load();
+        } catch (IndexOutOfBoundsException e) {
+        }
     }
+
+	public void handleMovements() {
+        // TODO
+	}
+
+    /**
+     * Handle weapon action
+     * @see cloud.marchand.hypex.core.enumerations.WeaponState
+     */
+	public void handleWeapon() {
+        if (handWeapon != null) {
+            handWeapon.handle();
+        }
+	}
     
 }

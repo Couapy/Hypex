@@ -1,6 +1,7 @@
 package cloud.marchand.hypex.core.models;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import cloud.marchand.hypex.core.enumerations.GameState;
@@ -93,13 +94,6 @@ public abstract class Game implements Runnable {
     protected boolean friendlyFire = false;
 
     /**
-     * Indicate if players can move.
-     * 
-     * @see cloud.marchand.hypex.core.enumerations.GameState#ENDED
-     */
-    protected boolean canMove = false;
-
-    /**
      * Useful for limit the refresh rate of the game.
      */
     private Timer timer;
@@ -164,6 +158,13 @@ public abstract class Game implements Runnable {
     private void handleStateRunning() {
         if (isRoundEnded()) {
             setState(GameState.ROUND_ENDED);
+        }
+
+        Iterator<PlayerInterface> playerIterator = players.iterator();
+        while (playerIterator.hasNext()) {
+            PlayerInterface player = playerIterator.next();
+            player.handleMovements();
+            player.handleWeapon();
         }
     }
 
