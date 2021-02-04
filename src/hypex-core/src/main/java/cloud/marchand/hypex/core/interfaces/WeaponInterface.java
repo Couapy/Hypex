@@ -91,8 +91,22 @@ public abstract class WeaponInterface {
     /**
      * Make stop firing the weapon.
      */
-    public void unshoot() {
+    public void unShoot() {
         primaryShootActived = false;
+    }
+
+    /**
+     * Make shoot the weapon.
+     */
+    public void shootSecondary() {
+        secondaryShootActived = true;
+    }
+    
+    /**
+     * Make stop firing the weapon.
+     */
+    public void unShootSecondary() {
+        secondaryShootActived = false;
     }
 
     /**

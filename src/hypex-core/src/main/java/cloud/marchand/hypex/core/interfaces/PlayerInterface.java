@@ -46,11 +46,38 @@ public abstract class PlayerInterface {
     }
 
     /**
-     * Shoot the weapon in hand
+     * Make the weapon in hand shoot.
      */
     public void shoot() {
         if (handWeapon != null) {
             handWeapon.shoot();
+        }
+    }
+
+    /**
+     * Make not the weapon in hand shoot.
+     */
+    public void unShoot() {
+        if (handWeapon != null) {
+            handWeapon.unShoot();
+        }
+    }
+
+    /**
+     * Make the weapon in hand shoot.
+     */
+    public void shootSecondary() {
+        if (handWeapon != null) {
+            handWeapon.shootSecondary();
+        }
+    }
+
+    /**
+     * Make not the weapon in hand shoot.
+     */
+    public void unShootSecondary() {
+        if (handWeapon != null) {
+            handWeapon.unShootSecondary();
         }
     }
 
@@ -63,6 +90,10 @@ public abstract class PlayerInterface {
         }
     }
 
+    /**
+     * Change the weapon in hand.
+     * @param index index of the weapon
+     */
     public void changeWeapon(int index) {
         try {
             handWeapon = weapons.get(index);
@@ -71,6 +102,9 @@ public abstract class PlayerInterface {
         }
     }
 
+    /**
+     * Move the player.
+     */
 	public void handleMovements() {
         // TODO
 	}
@@ -85,4 +119,12 @@ public abstract class PlayerInterface {
         }
 	}
     
+    /**
+     * Defines player name.
+     * @param name pseudo
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }
