@@ -1,9 +1,9 @@
-package cloud.marchand.hypex.gui;
+package cloud.marchand.hypex.client;
 
 import java.io.IOException;
 
-import cloud.marchand.hypex.gui.map.Map;
-import cloud.marchand.hypex.gui.map.TilledMap;
+import cloud.marchand.hypex.client.map.Map;
+import cloud.marchand.hypex.client.map.TilledMap;
 
 public class App {
 

@@ -2,6 +2,7 @@ package cloud.marchand.hypex.core.models.geom;
 
 /**
  * Represent a segment between two points.
+ * 
  * @see cloud.marchand.hypex.core.models.geom.Point
  */
 public class Segment {
@@ -18,6 +19,7 @@ public class Segment {
 
     /**
      * Create a segment from two points.
+     * 
      * @param a first point
      * @param b second point
      */
@@ -28,6 +30,7 @@ public class Segment {
 
     /**
      * Give the intersection of segments.
+     * 
      * @param segment other segment to intersect
      * @return the intersection point, or null if there isn't
      */
@@ -46,19 +49,35 @@ public class Segment {
         if (vA.x == 0d) {
             FunctionLinear lineB = new FunctionLinear(segment.p1, segment.p2);
             return lineB.evaluate(p1.x);
-        }
-        else if (vB.x == 0d) {
+        } else if (vB.x == 0d) {
             FunctionLinear lineA = new FunctionLinear(p1, p2);
             return lineA.evaluate(segment.p1.x);
-        }
-        else {
+        } else {
             FunctionLinear lineA = new FunctionLinear(p1, p2);
             FunctionLinear lineB = new FunctionLinear(segment.p1, segment.p2);
             double x = (lineB.c - lineA.c) / (lineA.m - lineB.m);
             double y = lineA.m * x + lineA.c;
-    
+
             return new Point(x, y);
         }
     }
-    
+
+    /**
+     * Defines the first point.
+     * 
+     * @param p1 first point
+     */
+    public void setPoint1(Point p1) {
+        this.p1 = p1;
+    }
+
+    /**
+     * Defines the second point.
+     * 
+     * @param p2 second point
+     */
+    public void setPoint2(Point p2) {
+        this.p2 = p2;
+    }
+
 }
