@@ -1,13 +1,16 @@
 package cloud.marchand.hypex.gui;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import java.io.IOException;
+
+import cloud.marchand.hypex.gui.map.Map;
+import cloud.marchand.hypex.gui.map.TilledMap;
+
+public class App {
+
+    public static void main(String[] args) throws IOException {
+        Map map = new TilledMap("testMap.txt");
+        Window window = new Window(map);
+        window.setVisible(true);
     }
+
 }
