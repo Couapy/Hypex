@@ -62,7 +62,7 @@ public class Timer {
      * @return current refresh rate
      */
     public int getCurrentRefreshRate() {
-        return currentRefreshRate;
+        return refreshRateMesured;
     }
 
     /**
