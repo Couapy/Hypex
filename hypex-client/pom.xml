@@ -8,11 +8,11 @@
   </parent>
 
   <groupId>cloud.marchand.hypex</groupId>
-  <artifactId>hypex-gui</artifactId>
+  <artifactId>hypex-client</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 
-  <name>hypex-gui</name>
-  <url>https://github.com/Couapy/Hypex3/tree/master/src/hypex-gui</url>
+  <name>hypex-client</name>
+  <url>https://github.com/Couapy/hypex/tree/master/src/hypex-gui</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

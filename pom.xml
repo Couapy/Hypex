@@ -15,7 +15,6 @@
 
   <modules>
     <module>hypex-core</module>
-    <module>hypex-gui</module>
     <module>hypex-client</module>
     <module>hypex-server</module>
   </modules>
