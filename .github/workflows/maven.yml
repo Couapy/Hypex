@@ -19,5 +19,4 @@ jobs:
         java-package: jdk
         architecture: x64
     - name: Build with Maven
-      working-directory: src/
       run: mvn --batch-mode --update-snapshots verify
