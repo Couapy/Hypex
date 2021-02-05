@@ -25,6 +25,7 @@ public class Point {
 
     /**
      * Create a point with coordinates.
+     * 
      * @param x x component
      * @param y y component
      */
@@ -35,6 +36,7 @@ public class Point {
 
     /**
      * Translate the point.
+     * 
      * @param x x translation
      * @param y y translation
      */
@@ -45,6 +47,7 @@ public class Point {
 
     /**
      * Give x component.
+     * 
      * @return x component
      */
     public double getX() {
@@ -53,6 +56,7 @@ public class Point {
 
     /**
      * Give y component.
+     * 
      * @return y component
      */
     public double getY() {
@@ -61,6 +65,7 @@ public class Point {
 
     /**
      * Make readable the object in console.
+     * 
      * @return human-readable coordinates
      */
     @Override
