@@ -1,16 +1,15 @@
 package cloud.marchand.hypex.core.interfaces;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import cloud.marchand.hypex.core.enumerations.PlayerState;
+import cloud.marchand.hypex.core.models.geom.OrientablePoint;
 
 /**
  * Represent a player in the game
  */
-@SuppressWarnings("serial")
-public abstract class PlayerInterface extends Point {
+public abstract class PlayerInterface extends OrientablePoint {
 
     /**
      * Name of the player
@@ -212,6 +211,14 @@ public abstract class PlayerInterface extends Point {
      */
     public void moveRight(boolean move) {
         moveRight = move;
+    }
+
+    /**
+     * Giv the player name.
+     * @return name
+     */
+    public String getName() {
+        return name;
     }
 
 }

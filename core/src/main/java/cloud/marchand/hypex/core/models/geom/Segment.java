@@ -58,8 +58,7 @@ public class Segment {
             return lineA.evaluate(segment.p1.x);
         } else {
             FunctionLinear lineA = new FunctionLinear(p1, p2);
-            FunctionLinear lineB = new FunctionLinear(segment.p1, segment.p2);
-            return lineA.getIntersectionPoint(lineB);
+            return lineA.getIntersectionPoint(segment);
         }
     }
 

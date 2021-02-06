@@ -3,8 +3,17 @@ package cloud.marchand.hypex.core.interfaces;
 import cloud.marchand.hypex.core.enumerations.WeaponState;
 
 public abstract class WeaponInterface {
-    
+
+    /**
+     * The name of the weapon.
+     */
     private String name;
+
+    /**
+     * The weapon state.
+     * 
+     * @see cloud.marchand.hypex.core.enumerations.WeaponState
+     */
     private WeaponState state;
 
     /**
@@ -67,12 +76,11 @@ public abstract class WeaponInterface {
     public abstract void secondaryShoot();
 
     /**
-     * Set the weapon loading.
-     * Happens when the player select the weapon.
+     * Set the weapon loading. Happens when the player select the weapon.
      */
     public void load() {
         setState(WeaponState.LOADING);
-	}
+    }
 
     /**
      * Make reloading the weapon.
@@ -87,7 +95,7 @@ public abstract class WeaponInterface {
     public void shoot() {
         primaryShootActived = true;
     }
-    
+
     /**
      * Make stop firing the weapon.
      */
@@ -101,7 +109,7 @@ public abstract class WeaponInterface {
     public void shootSecondary() {
         secondaryShootActived = true;
     }
-    
+
     /**
      * Make stop firing the weapon.
      */
@@ -117,13 +125,11 @@ public abstract class WeaponInterface {
             if (lastTimeChangedState + timeLoad <= System.currentTimeMillis()) {
                 setState(WeaponState.READY);
             }
-        }
-        else if (state == WeaponState.READY) {
+        } else if (state == WeaponState.READY) {
             if (primaryShootActived || secondaryShootActived) {
                 setState(WeaponState.FIRING);
             }
-        }
-        else if (state == WeaponState.FIRING) {
+        } else if (state == WeaponState.FIRING) {
             if (bulletsMagazine == 0) {
                 return;
             }
@@ -132,15 +138,13 @@ public abstract class WeaponInterface {
                 bulletsMagazine--;
                 // TODO: give damage to others players
             }
-        }
-        else if (state == WeaponState.RELOADING) {
+        } else if (state == WeaponState.RELOADING) {
             if (lastTimeChangedState + timeReload <= System.currentTimeMillis()) {
                 setState(WeaponState.READY);
                 if (bulletsSupply < magazineCapacity) {
                     bulletsMagazine = bulletsSupply;
                     bulletsSupply = 0;
-                }
-                else {
+                } else {
                     bulletsMagazine = magazineCapacity;
                     bulletsSupply -= magazineCapacity;
                 }
@@ -150,6 +154,7 @@ public abstract class WeaponInterface {
 
     /**
      * Update the state of the weapon.
+     * 
      * @param weaponState state of the {@link WeaponState}
      */
     private void setState(WeaponState weaponState) {
