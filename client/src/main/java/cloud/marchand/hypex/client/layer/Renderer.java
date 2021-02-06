@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Set;
 
-import cloud.marchand.hypex.client.Canvas;
 import cloud.marchand.hypex.client.interfaces.Layer;
 import cloud.marchand.hypex.client.map.Map;
 import cloud.marchand.hypex.core.models.geom.Segment;
@@ -23,20 +22,6 @@ public class Renderer extends Layer {
      * Number of pixels displayed for one unit.
      */
     public static final int WIDTH_SQUARE = 100;
-
-    /**
-     * Component to paint into.
-     */
-    private Canvas canvas;
-
-    /**
-     * Initialize the renderer.
-     * 
-     * @param canvas drawing component
-     */
-    public Renderer(Canvas canvas) {
-        this.canvas = canvas;
-    }
 
     /**
      * Draw map.
