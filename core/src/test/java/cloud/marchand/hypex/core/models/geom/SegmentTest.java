@@ -5,9 +5,12 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SegmentTest {
+
+    private static final double THRESHOLD = 0.000000000001;
 
     private Segment a;
     private Segment b;
@@ -23,8 +26,8 @@ public class SegmentTest {
             new Point(1, 5)
         );
         b = new Segment(
-            new Point(3, 1),
-            new Point(3, 5)
+            new Point(3, 5),
+            new Point(3, 1)
         );
         c = new Segment(
             new Point(5, 2),
@@ -35,8 +38,8 @@ public class SegmentTest {
             new Point(6, 6)
         );
         e = new Segment(
-            new Point(1, 8),
-            new Point(6, 8)
+            new Point(6, 8),
+            new Point(1, 8)
         );
         f = new Segment(
             new Point(5, 5),
@@ -75,4 +78,14 @@ public class SegmentTest {
         assertNull(c.getIntersectionPoint(f));
     }
     
+    @Test
+    public void getAngle() {
+        assertTrue("Angle should be PI/2", Math.abs(a.getAngle() - (Math.PI / 2)) <= THRESHOLD);
+        assertTrue("Angle should be -PI/2", Math.abs(b.getAngle() + (Math.PI / 2)) <= THRESHOLD);
+        assertTrue("Angle should be 0", d.getAngle() <= THRESHOLD);
+        assertTrue("Angle should be PI", Math.abs(e.getAngle() - Math.PI) <= THRESHOLD);
+        Segment s = new Segment(new Point(0, 0), new Point(3, 3));
+        assertTrue(Math.abs(s.getAngle() - (Math.PI / 4)) <= THRESHOLD);
+    }
+
 }

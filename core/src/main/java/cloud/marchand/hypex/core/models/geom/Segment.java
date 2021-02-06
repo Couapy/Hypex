@@ -1,5 +1,9 @@
 package cloud.marchand.hypex.core.models.geom;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Represent a segment between two points.
  * 
@@ -55,10 +59,7 @@ public class Segment {
         } else {
             FunctionLinear lineA = new FunctionLinear(p1, p2);
             FunctionLinear lineB = new FunctionLinear(segment.p1, segment.p2);
-            double x = (lineB.c - lineA.c) / (lineA.m - lineB.m);
-            double y = lineA.m * x + lineA.c;
-
-            return new Point(x, y);
+            return lineA.getIntersectionPoint(lineB);
         }
     }
 
@@ -78,6 +79,34 @@ public class Segment {
      */
     public void setPoint2(Point p2) {
         this.p2 = p2;
+    }
+
+    /**
+     * Get the segment points in a list.
+     * 
+     * @return a list of points
+     */
+    public List<Point> getPoints() {
+        return new ArrayList<>(Arrays.asList(new Point[] { p1, p2 }));
+    }
+
+    /**
+     * Get the segment as a vector.
+     * 
+     * @return vector
+     */
+    public Point asVector() {
+        return new Point(p2.x - p1.x, p2.y - p1.y);
+    }
+
+    /**
+     * Return the angle of the segment with x axis.
+     * 
+     * @return angle in radians
+     */
+    public double getAngle() {
+        Point p = new Point(p2.x - p1.x, p2.y - p1.y);
+        return Math.atan2(p.y, p.x);
     }
 
 }
