@@ -9,9 +9,6 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import cloud.marchand.hypex.client.interfaces.Layer;
-import cloud.marchand.hypex.client.layer.FPSCounter;
-import cloud.marchand.hypex.client.layer.RaycastingSkeleton;
-import cloud.marchand.hypex.client.layer.Renderer;
 import cloud.marchand.hypex.client.map.Map;
 
 /**
@@ -34,11 +31,6 @@ public class Canvas extends JPanel {
     public Canvas(Map map) {
         this.map = map;
 
-        // Overlays
-        layers.add(new Renderer(this));
-        layers.add(new RaycastingSkeleton(this));
-        layers.add(new FPSCounter());
-
         // Controllers
         // this.addMouseMotionListener(new MouseMotionController(this));
     }
@@ -56,6 +48,17 @@ public class Canvas extends JPanel {
         while (iterator.hasNext()) {
             Layer overlay = iterator.next();
             overlay.draw(graphics, map);
+        }
+    }
+
+    /**
+     * Add a layer
+     * 
+     * @param layer new layer
+     */
+    public void addLayer(Layer layer) {
+        if (layer != null) {
+            layers.add(layer);
         }
     }
 

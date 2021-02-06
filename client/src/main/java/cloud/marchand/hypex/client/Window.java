@@ -4,38 +4,36 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import cloud.marchand.hypex.client.controller.KeyboardController;
 import cloud.marchand.hypex.client.controller.ResizeController;
-import cloud.marchand.hypex.client.map.Map;
 import cloud.marchand.hypex.core.models.Timer;
 
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements Runnable {
 
-    private Map map;
     private Timer timer;
     private Canvas canvas;
 
-    public Window(Map map) {
-        this.map = map;
+    public Window(Dimension dimension, Canvas canvas) {
         this.timer = new Timer(144);
+        this.canvas = canvas;
 
-        initialize();
+        initialize(dimension);
         
         Thread thread = new Thread(this);
         thread.start();
     }
 
-    private void initialize() {
+    private void initialize(Dimension dimension) {
         // Configuration
         setTitle("Map Visualizer");
-        setSize(new Dimension(1440, 1024));
+        setSize(dimension);
         setLayout(null);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Add canvas
-        canvas = new Canvas(map);
         add(canvas);
         canvas.setBounds(0, 0, getWidth(), getHeight());
 
