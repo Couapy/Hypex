@@ -41,6 +41,7 @@ public class Window extends JFrame implements Runnable {
 
         // Add controllers
         this.addComponentListener(new ResizeController(this));
+        this.addKeyListener(new KeyboardController());
     }
 
     @Override
