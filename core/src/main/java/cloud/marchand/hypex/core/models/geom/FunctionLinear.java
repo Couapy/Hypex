@@ -60,11 +60,14 @@ public class FunctionLinear {
      * Get the intersection point of two linear functions
      * 
      * @param line other linear function to intersect
-     * @return an intersection point
+     * @return an intersection point, null if no intersection
      */
     public Point getIntersectionPoint(FunctionLinear line) {
-        if (m == line.m) {
+        if (m == line.m && c == line.c) {
             return evaluate(0d);
+        }
+        else if (m == line.m) {
+            return null;
         }
 
         double x = (line.c - c) / (m - line.m);
@@ -81,7 +84,10 @@ public class FunctionLinear {
     public Point getIntersectionPoint(Segment segment) {
         FunctionLinear lineSegment = new FunctionLinear(segment.p1, segment.p2);
         Point intersection = getIntersectionPoint(lineSegment);
-        if (Math.min(segment.p1.x, segment.p2.x) <= intersection.x
+        if (intersection == null) {
+            return null;
+        }
+        else if (Math.min(segment.p1.x, segment.p2.x) <= intersection.x
                 && intersection.x <= Math.max(segment.p1.x, segment.p2.x)
                 && Math.min(segment.p1.y, segment.p2.y) <= intersection.y
                 && intersection.y <= Math.max(segment.p1.y, segment.p2.y)) {

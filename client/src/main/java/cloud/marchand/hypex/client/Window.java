@@ -1,6 +1,7 @@
 package cloud.marchand.hypex.client;
 
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
@@ -16,7 +17,7 @@ public class Window extends JFrame implements Runnable {
     private Canvas canvas;
 
     public Window(Dimension dimension, Canvas canvas) {
-        this.timer = new Timer(144);
+        this.timer = new Timer(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate());
         this.canvas = canvas;
 
         initialize(dimension);
