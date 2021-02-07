@@ -10,13 +10,10 @@ This parent module contains all the needed for the game.
 
 This is the main module of the project. It contains the core of the project.
 
-### hypex.gui
+### hypex.client
 
 This module contains the graphical user interface : the default interface
 for lambda user.
-
-### hypex.client
-
 The client communicates with the server about the game and allow to play in multiplayer mode.
 
 ### hypex.server

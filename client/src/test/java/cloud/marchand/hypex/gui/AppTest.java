@@ -1,4 +1,4 @@
-package cloud.marchand.hypex.gui;
+package cloud.marchand.hypex.client;
 
 import static org.junit.Assert.assertTrue;
 
