@@ -56,4 +56,44 @@ public class FunctionLinear {
         return new Point(x, m * x + c);
     }
 
+    /**
+     * Get the intersection point of two linear functions
+     * 
+     * @param line other linear function to intersect
+     * @return an intersection point, null if no intersection
+     */
+    public Point getIntersectionPoint(FunctionLinear line) {
+        if (m == line.m && c == line.c) {
+            return evaluate(0d);
+        }
+        else if (m == line.m) {
+            return null;
+        }
+
+        double x = (line.c - c) / (m - line.m);
+        double y = m * x + c;
+        return new Point(x, y);
+    }
+
+    /**
+     * Get the intersection point with a segment
+     * 
+     * @param segment segment to intersect
+     * @return an intersection point, null if no intersection
+     */
+    public Point getIntersectionPoint(Segment segment) {
+        FunctionLinear lineSegment = new FunctionLinear(segment.p1, segment.p2);
+        Point intersection = getIntersectionPoint(lineSegment);
+        if (intersection == null) {
+            return null;
+        }
+        else if (Math.min(segment.p1.x, segment.p2.x) <= intersection.x
+                && intersection.x <= Math.max(segment.p1.x, segment.p2.x)
+                && Math.min(segment.p1.y, segment.p2.y) <= intersection.y
+                && intersection.y <= Math.max(segment.p1.y, segment.p2.y)) {
+            return intersection;
+        }
+        return null;
+    }
+
 }

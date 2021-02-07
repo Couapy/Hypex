@@ -1,5 +1,9 @@
 package cloud.marchand.hypex.core.models.geom;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Represent a segment between two points.
  * 
@@ -46,29 +50,62 @@ public class Segment {
 
         // Intersection
         // Avoid vertical functions
-        Point res;
         if (vA.x == 0d) {
             FunctionLinear lineB = new FunctionLinear(segment.p1, segment.p2);
-            res = lineB.evaluate(p1.x);
+            return lineB.evaluate(p1.x);
         } else if (vB.x == 0d) {
             FunctionLinear lineA = new FunctionLinear(p1, p2);
-            res = lineA.evaluate(segment.p1.x);
+            return lineA.evaluate(segment.p1.x);
         } else {
             FunctionLinear lineA = new FunctionLinear(p1, p2);
-            FunctionLinear lineB = new FunctionLinear(segment.p1, segment.p2);
-            double x = (lineB.c - lineA.c) / (lineA.m - lineB.m);
-            double y = lineA.m * x + lineA.c;
-
-            res = new Point(x, y);
+            return lineA.getIntersectionPoint(segment);
         }
+    }
 
-        // Verify if the point belong to the segment
-        if (Math.min(p1.x, p2.x) <= res.x && res.x <= Math.max(p1.x, p2.x) && Math.min(p1.y, p2.y) <= res.y
-                && res.y <= Math.max(p1.y, p2.y)) {
-            return res;
-        }
+    /**
+     * Defines the first point.
+     * 
+     * @param p1 first point
+     */
+    public void setPoint1(Point p1) {
+        this.p1 = p1;
+    }
 
-        return null;
+    /**
+     * Defines the second point.
+     * 
+     * @param p2 second point
+     */
+    public void setPoint2(Point p2) {
+        this.p2 = p2;
+    }
+
+    /**
+     * Get the segment points in a list.
+     * 
+     * @return a list of points
+     */
+    public List<Point> getPoints() {
+        return new ArrayList<>(Arrays.asList(new Point[] { p1, p2 }));
+    }
+
+    /**
+     * Get the segment as a vector.
+     * 
+     * @return vector
+     */
+    public Point asVector() {
+        return new Point(p2.x - p1.x, p2.y - p1.y);
+    }
+
+    /**
+     * Return the angle of the segment with x axis.
+     * 
+     * @return angle in radians
+     */
+    public double getAngle() {
+        Point p = new Point(p2.x - p1.x, p2.y - p1.y);
+        return Math.atan2(p.y, p.x);
     }
 
 }

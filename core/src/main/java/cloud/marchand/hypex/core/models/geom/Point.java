@@ -1,9 +1,47 @@
 package cloud.marchand.hypex.core.models.geom;
 
+import java.util.Comparator;
+
 /**
  * 2D point.
  */
 public class Point {
+
+    /**
+     * Comparator for sorting list of points.
+     * @see cloud.marchand.hypex.client.map.Map.getProjection
+     */
+    public static class DistanceComparator implements Comparator<Point> {
+
+        /**
+         * Origin of the comparaison.
+         */
+        private Point origin;
+
+        /**
+         * Create a comparator from a point of view.
+         * @param origin
+         */
+        public DistanceComparator(Point origin) {
+            this.origin = origin;
+        }
+
+        @Override
+        public int compare(Point o1, Point o2) {
+            double distance1, distance2;
+            distance1 = origin.distance(o1);
+            distance2 = origin.distance(o2);
+            if (distance1 == distance2) {
+                return 0;
+            } else if (distance1 < distance2) {
+                return -1;
+            }
+            else {
+                return 1;
+            }
+        }
+
+    }
 
     /**
      * x component.
@@ -61,6 +99,19 @@ public class Point {
      */
     public double getY() {
         return y;
+    }
+
+    /**
+     * Return the distance between two points
+     * 
+     * @param point other point reference
+     * @return distance
+     */
+    public double distance(Point point) {
+        if (point == null) {
+            return 0d;
+        }
+        return Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2));
     }
 
     /**
