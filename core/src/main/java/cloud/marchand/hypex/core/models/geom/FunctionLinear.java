@@ -17,6 +17,7 @@ public class FunctionLinear {
 
     /**
      * Create a linear function from constants.
+     * 
      * @param m coefficient
      * @param c constant
      */
@@ -26,8 +27,8 @@ public class FunctionLinear {
     }
 
     /**
-     * Create a linear function from two points.
-     * Order of points doesn't matter.
+     * Create a linear function from two points. Order of points doesn't matter.
+     * 
      * @param a first point
      * @param b second point
      */
@@ -38,6 +39,7 @@ public class FunctionLinear {
 
     /**
      * Create a linear function from a segement.
+     * 
      * @param segment two points
      */
     public FunctionLinear(Segment segment) {
@@ -46,11 +48,12 @@ public class FunctionLinear {
 
     /**
      * Give the point correspond to f(x) = y.
+     * 
      * @param x x parameter
      * @return point on the linear function
      */
     public Point evaluate(double x) {
         return new Point(x, m * x + c);
     }
-    
+
 }
