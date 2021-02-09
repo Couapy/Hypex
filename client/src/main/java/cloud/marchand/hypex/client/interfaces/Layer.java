@@ -22,7 +22,7 @@ public abstract class Layer {
     /**
      * Create a new overlay instance.
      */
-    public Layer() {
+    protected Layer() {
         mouseFocus = false;
         keyboardFocus = false;
     }

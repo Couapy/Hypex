@@ -1,9 +1,10 @@
-package cloud.marchand.hypex.client.controller;
+package cloud.marchand.hypex.client.listener.window;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import cloud.marchand.hypex.client.Window;
+import cloud.marchand.hypex.client.interfaces.Vue;
 /**
  * Control the resize event of the window.
  */
@@ -29,7 +30,10 @@ public class ResizeController extends ComponentAdapter {
      */
     @Override
     public void componentResized(ComponentEvent e) {
-        window.getCanvas().setBounds(0, 0, window.getWidth(), window.getHeight());
+        Vue vue = window.getVue();
+        if (vue != null) {
+            vue.setBounds(0, 0, window.getWidth(), window.getHeight());
+        }
     }
     
 }

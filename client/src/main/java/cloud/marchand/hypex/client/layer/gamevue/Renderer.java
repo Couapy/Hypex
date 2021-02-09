@@ -1,4 +1,4 @@
-package cloud.marchand.hypex.client.layer;
+package cloud.marchand.hypex.client.layer.gamevue;
 
 import java.awt.Color;
 import java.awt.Graphics;

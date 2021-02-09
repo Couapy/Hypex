@@ -1,4 +1,4 @@
-package cloud.marchand.hypex.client.layer;
+package cloud.marchand.hypex.client.layer.gamevue;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,9 +7,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import cloud.marchand.hypex.client.Canvas;
 import cloud.marchand.hypex.client.interfaces.Layer;
 import cloud.marchand.hypex.client.map.Map;
+import cloud.marchand.hypex.client.vues.GameVue;
 import cloud.marchand.hypex.core.models.geom.Point;
 import cloud.marchand.hypex.core.models.geom.Segment;
 
@@ -47,15 +47,15 @@ public class RaycastingSkeleton extends Layer {
 
     }
 
-    private Canvas canvas;
+    private GameVue vue;
 
-    public RaycastingSkeleton(Canvas canvas) {
-        this.canvas = canvas;
+    public RaycastingSkeleton(GameVue vue) {
+        this.vue = vue;
     }
 
     @Override
     public void draw(Graphics graphics, Map map) {
-        java.awt.Point mousePosition = canvas.getMousePosition();
+        java.awt.Point mousePosition = vue.getMousePosition();
         mousePosition = new java.awt.Point(100, 300);
         if (mousePosition != null) {
             List<Projection> projections = getProjections(map,
@@ -96,7 +96,7 @@ public class RaycastingSkeleton extends Layer {
         //     }
         // }
 
-        java.awt.Point mousePosition = canvas.getMousePosition();
+        java.awt.Point mousePosition = vue.getMousePosition();
         if (mousePosition != null) {
             Point mousePoint = new Point((double) mousePosition.x / Renderer.WIDTH_SQUARE, (double) mousePosition.y / Renderer.WIDTH_SQUARE);
             double angle  = (new Segment(origin, mousePoint)).getAngle();
