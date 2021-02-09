@@ -33,6 +33,8 @@ public class ResizeController extends ComponentAdapter {
         Vue vue = window.getVue();
         if (vue != null) {
             vue.setBounds(0, 0, window.getWidth(), window.getHeight());
+            vue.revalidate();
+            vue.repaint();
         }
     }
     

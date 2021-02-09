@@ -25,16 +25,13 @@ public class Window extends JFrame {
      * @param dimension size of the window
      * @param vue current vue
      */
-    public Window(Dimension dimension, Vue vue) {
+    public Window(Dimension dimension) {
         // Configuration
         setTitle("hypex");
         setSize(dimension);
         setLayout(null);
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        // Display vue
-        setVue(vue);
 
         // Add controllers
         this.addComponentListener(new ResizeController(this));

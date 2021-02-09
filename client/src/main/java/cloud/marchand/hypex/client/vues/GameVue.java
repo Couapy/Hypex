@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import cloud.marchand.hypex.client.App;
 import cloud.marchand.hypex.client.interfaces.Layer;
 import cloud.marchand.hypex.client.interfaces.Vue;
 import cloud.marchand.hypex.client.layer.gamevue.FPSCounter;
@@ -42,7 +43,8 @@ public class GameVue extends Vue implements Runnable {
      * 
      * @param map map to display
      */
-    public GameVue(Map map) {
+    public GameVue(App app, Map map) {
+        super(app);
         this.timer = new Timer(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
                 .getDisplayMode().getRefreshRate());
         this.map = map;
