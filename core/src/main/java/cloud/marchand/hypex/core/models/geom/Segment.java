@@ -51,15 +51,26 @@ public class Segment {
         // Intersection
         // Avoid vertical functions
         if (vA.x == 0d) {
-            FunctionLinear lineB = new FunctionLinear(segment.p1, segment.p2);
+            LinearFunction lineB = new LinearFunction(segment.p1, segment.p2);
             return lineB.evaluate(p1.x);
         } else if (vB.x == 0d) {
-            FunctionLinear lineA = new FunctionLinear(p1, p2);
+            LinearFunction lineA = new LinearFunction(p1, p2);
             return lineA.evaluate(segment.p1.x);
         } else {
-            FunctionLinear lineA = new FunctionLinear(p1, p2);
+            LinearFunction lineA = new LinearFunction(p1, p2);
             return lineA.getIntersectionPoint(segment);
         }
+    }
+
+    /**
+     * Indicates if the point belongs to the segment.
+     * 
+     * @param point point to verify
+     * @return true if the point belongs to the segment
+     */
+    public boolean pointBelongTo(Point point) { // Write tests
+        return Math.min(p1.x, p2.x) <= point.x && point.x <= Math.max(p1.x, p2.x) && Math.min(p1.y, p2.y) <= point.y
+                && point.y <= Math.max(p1.y, p2.y);
     }
 
     /**

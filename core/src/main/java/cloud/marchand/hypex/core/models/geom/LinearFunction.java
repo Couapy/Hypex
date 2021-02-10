@@ -3,7 +3,7 @@ package cloud.marchand.hypex.core.models.geom;
 /**
  * Represent a linear function.
  */
-public class FunctionLinear {
+public class LinearFunction {
 
     /**
      * Proportionality coefficient.
@@ -21,7 +21,7 @@ public class FunctionLinear {
      * @param m coefficient
      * @param c constant
      */
-    public FunctionLinear(double m, double c) {
+    public LinearFunction(double m, double c) {
         this.m = m;
         this.c = c;
     }
@@ -32,7 +32,7 @@ public class FunctionLinear {
      * @param a first point
      * @param b second point
      */
-    public FunctionLinear(Point a, Point b) {
+    public LinearFunction(Point a, Point b) {
         m = (b.y - a.y) / (b.x - a.x);
         c = a.y - m * a.x;
     }
@@ -42,7 +42,7 @@ public class FunctionLinear {
      * 
      * @param segment two points
      */
-    public FunctionLinear(Segment segment) {
+    public LinearFunction(Segment segment) {
         this(segment.p1, segment.p2);
     }
 
@@ -62,11 +62,10 @@ public class FunctionLinear {
      * @param line other linear function to intersect
      * @return an intersection point, null if no intersection
      */
-    public Point getIntersectionPoint(FunctionLinear line) {
+    public Point getIntersectionPoint(LinearFunction line) {
         if (m == line.m && c == line.c) {
             return evaluate(0d);
-        }
-        else if (m == line.m) {
+        } else if (m == line.m) {
             return null;
         }
 
@@ -82,15 +81,14 @@ public class FunctionLinear {
      * @return an intersection point, null if no intersection
      */
     public Point getIntersectionPoint(Segment segment) {
-        FunctionLinear lineSegment = new FunctionLinear(segment.p1, segment.p2);
-        Point intersection = getIntersectionPoint(lineSegment);
-        if (intersection == null) {
-            return null;
+        Point intersection = null;
+        if (segment.p1.x - segment.p2.x == 0d) {
+            intersection = evaluate(segment.p1.x);
+        } else {
+            LinearFunction lineSegment = new LinearFunction(segment.p1, segment.p2);
+            intersection = getIntersectionPoint(lineSegment);
         }
-        else if (Math.min(segment.p1.x, segment.p2.x) <= intersection.x
-                && intersection.x <= Math.max(segment.p1.x, segment.p2.x)
-                && Math.min(segment.p1.y, segment.p2.y) <= intersection.y
-                && intersection.y <= Math.max(segment.p1.y, segment.p2.y)) {
+        if (intersection != null && segment.pointBelongTo(intersection)) {
             return intersection;
         }
         return null;
