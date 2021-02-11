@@ -2,6 +2,7 @@ package cloud.marchand.hypex.client.layer.gamevue;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 
 import cloud.marchand.hypex.client.interfaces.Layer;
 import cloud.marchand.hypex.client.map.Map;
@@ -29,6 +30,22 @@ public class FPSCounter extends Layer {
     private int FPS_AVERAGE = 0;
 
     /**
+     * Good FPS average limit.
+     */
+    private int GOOD_AVERAGE;
+
+    /**
+     * Medium FPS average limit.
+     */
+    private int MEDIUM_AVERAGE;
+
+    public FPSCounter() {
+        int maxRefreshRate = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
+        GOOD_AVERAGE = maxRefreshRate - 10;
+        MEDIUM_AVERAGE = (int)(maxRefreshRate * 0.7d);
+    }
+
+    /**
      * Update the FPS counter and display it on the top left corner.
      */
     @Override
@@ -39,10 +56,10 @@ public class FPSCounter extends Layer {
             FPS = 0;
         }
         FPS++;
-        if (FPS_AVERAGE > 120) {
+        if (FPS_AVERAGE > GOOD_AVERAGE) {
             graphics.setColor(Color.GREEN);
         }
-        else if (FPS_AVERAGE > 60) {
+        else if (FPS_AVERAGE > MEDIUM_AVERAGE) {
             graphics.setColor(Color.ORANGE);
         }
         else {
