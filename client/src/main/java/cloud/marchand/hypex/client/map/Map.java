@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import cloud.marchand.hypex.core.models.geom.FunctionLinear;
+import cloud.marchand.hypex.core.models.geom.LinearFunction;
 import cloud.marchand.hypex.core.models.geom.Point;
 import cloud.marchand.hypex.core.models.geom.Segment;
 import cloud.marchand.hypex.core.models.geom.Point.DistanceComparator;
@@ -29,7 +29,7 @@ public abstract class Map {
     /**
      * Instanciate a map.
      */
-    public Map() {
+    protected Map() {
         points = new HashSet<>();
         segments = new HashSet<>();
     }
@@ -61,17 +61,17 @@ public abstract class Map {
      */
     public Point getProjection(Point point, double angle) {
         Point orientedPoint = new Point(point.x + Math.cos(angle), point.y + Math.sin(angle));
-        FunctionLinear line = new FunctionLinear(point, orientedPoint);
+        LinearFunction line = new LinearFunction(point, orientedPoint);
         List<Point> intersections = new ArrayList<>();
 
         for (Segment segment : segments) {
             Point intersection = line.getIntersectionPoint(segment);
-            if (intersection != null) { // TODO: verify the angle (intersection not behind)
+            if (intersection != null && (new Segment(point, intersection)).getAngle() == angle) {
                 intersections.add(intersection);
             }
         }
 
-        if (intersections.size() > 0) {
+        if (!intersections.isEmpty()) {
             Collections.sort(intersections, new DistanceComparator(point));
             return intersections.get(0);
         }

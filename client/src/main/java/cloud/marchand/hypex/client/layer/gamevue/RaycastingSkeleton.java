@@ -11,18 +11,19 @@ import cloud.marchand.hypex.client.interfaces.Layer;
 import cloud.marchand.hypex.client.map.Map;
 import cloud.marchand.hypex.client.vues.GameVue;
 import cloud.marchand.hypex.core.models.geom.Point;
+import cloud.marchand.hypex.core.models.geom.PointOfView;
 import cloud.marchand.hypex.core.models.geom.Segment;
 
 public class RaycastingSkeleton extends Layer {
 
-    private final Color PROJECTION_COLOR = Color.ORANGE;
-    private final Color CURSOR_COLOR = Color.MAGENTA;
-    private final int CURSOR_THICK = 10;
+    private static final Color VISION_COLOR = Color.RED;
+    private static final Color PROJECTION_COLOR = Color.ORANGE;
+    private static final Color CURSOR_COLOR = Color.MAGENTA;
+    private static final int CURSOR_THICK = 10;
 
     private final double ANGLE_THRESHOLD = 0.0001;
 
     private class Projection {
-
         public Point pos;
         public double angle;
         public double distance;
@@ -55,21 +56,42 @@ public class RaycastingSkeleton extends Layer {
 
     @Override
     public void draw(Graphics graphics, Map map) {
-        java.awt.Point mousePosition = vue.getMousePosition();
-        mousePosition = new java.awt.Point(100, 300);
-        if (mousePosition != null) {
-            List<Projection> projections = getProjections(map,
-                    new Point(mousePosition.x / Renderer.WIDTH_SQUARE, mousePosition.y / Renderer.WIDTH_SQUARE));
-            graphics.setColor(PROJECTION_COLOR);
-            for (Projection projection : projections) {
-                graphics.drawLine(mousePosition.x, mousePosition.y, (int) (projection.pos.x * Renderer.WIDTH_SQUARE),
-                        (int) (projection.pos.y * Renderer.WIDTH_SQUARE));
-            }
+        PointOfView pov = vue.pov;
+        List<Projection> projections = getProjections(map, pov);
 
-            graphics.setColor(CURSOR_COLOR);
-            graphics.fillOval((int) mousePosition.getX() - CURSOR_THICK / 2,
-                    (int) mousePosition.getY() - CURSOR_THICK / 2, CURSOR_THICK, CURSOR_THICK);
+        // Draw projections
+        // graphics.setColor(PROJECTION_COLOR);
+        // for (Projection projection : projections) {
+        //     graphics.drawLine((int) (pov.x * Renderer.WIDTH_SQUARE), (int) (pov.y * Renderer.WIDTH_SQUARE),
+        //             (int) (projection.pos.x * Renderer.WIDTH_SQUARE), (int) (projection.pos.y * Renderer.WIDTH_SQUARE));
+        // }
+
+        // Draw vision
+        graphics.setColor(VISION_COLOR);
+        Point projection;
+        projection = map.getProjection(pov, pov.angle - pov.angleOfView / 2);
+        if (projection != null) {
+            graphics.drawLine(
+                (int)(pov.x * Renderer.WIDTH_SQUARE),
+                (int)(pov.y * Renderer.WIDTH_SQUARE),
+                (int)(projection.x * Renderer.WIDTH_SQUARE),
+                (int)(projection.y * Renderer.WIDTH_SQUARE)
+            );
         }
+        projection = map.getProjection(pov, pov.angle + pov.angleOfView / 2);
+        if (projection != null) {
+            graphics.drawLine(
+                (int)(pov.x * Renderer.WIDTH_SQUARE),
+                (int)(pov.y * Renderer.WIDTH_SQUARE),
+                (int)(projection.x * Renderer.WIDTH_SQUARE),
+                (int)(projection.y * Renderer.WIDTH_SQUARE)
+            );
+        }
+
+        // Draw position
+        graphics.setColor(CURSOR_COLOR);
+        graphics.fillOval((int) (pov.getX() * Renderer.WIDTH_SQUARE - CURSOR_THICK / 2d),
+                (int) (pov.getY() * Renderer.WIDTH_SQUARE - CURSOR_THICK / 2d), CURSOR_THICK, CURSOR_THICK);
     }
 
     /**
@@ -83,27 +105,16 @@ public class RaycastingSkeleton extends Layer {
     private List<Projection> getProjections(Map map, Point origin) {
         List<Projection> projections = new ArrayList<>();
 
-        // for (Segment segment : map.getSegments()) {
-        //     for (Point point : segment.getPoints()) {
-        //         Segment vision = new Segment(origin, point);
-        //         double angle = vision.getAngle();
-        //         for (int i = -1; i < 2; i++) {
-        //             Point projection = map.getProjection(origin, angle + i * ANGLE_THRESHOLD);
-        //             if (projection != null) {
-        //                 projections.add(new Projection(projection));
-        //             }
-        //         }
-        //     }
-        // }
-
-        java.awt.Point mousePosition = vue.getMousePosition();
-        if (mousePosition != null) {
-            Point mousePoint = new Point((double) mousePosition.x / Renderer.WIDTH_SQUARE, (double) mousePosition.y / Renderer.WIDTH_SQUARE);
-            double angle  = (new Segment(origin, mousePoint)).getAngle();
-            Point projection = map.getProjection(origin, angle);
-            System.out.print(projection + "\r");
-            if (projection != null) {
-                projections.add(new Projection(projection));
+        for (Segment segment : map.getSegments()) {
+            for (Point point : segment.getPoints()) {
+                Segment vision = new Segment(origin, point);
+                double angle = vision.getAngle();
+                for (int i = -1; i < 2; i++) {
+                    Point projection = map.getProjection(origin, angle + i * ANGLE_THRESHOLD);
+                    if (projection != null) {
+                        projections.add(new Projection(projection));
+                    }
+                }
             }
         }
 
@@ -111,7 +122,5 @@ public class RaycastingSkeleton extends Layer {
 
         return projections;
     }
-
-    public double angle;
 
 }

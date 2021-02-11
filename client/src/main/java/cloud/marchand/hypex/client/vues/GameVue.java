@@ -13,8 +13,12 @@ import cloud.marchand.hypex.client.interfaces.Vue;
 import cloud.marchand.hypex.client.layer.gamevue.FPSCounter;
 import cloud.marchand.hypex.client.layer.gamevue.RaycastingSkeleton;
 import cloud.marchand.hypex.client.layer.gamevue.Renderer;
+import cloud.marchand.hypex.client.listener.gamevue.KeyboardListener;
 import cloud.marchand.hypex.client.map.Map;
 import cloud.marchand.hypex.core.models.Timer;
+import cloud.marchand.hypex.core.models.geom.OrientablePoint;
+import cloud.marchand.hypex.core.models.geom.Point;
+import cloud.marchand.hypex.core.models.geom.PointOfView;
 
 /**
  * Game vue.
@@ -38,6 +42,8 @@ public class GameVue extends Vue implements Runnable {
 
     private Timer timer;
 
+    public PointOfView pov;
+
     /**
      * Instanciate a canvas.
      * 
@@ -49,11 +55,16 @@ public class GameVue extends Vue implements Runnable {
                 .getDisplayMode().getRefreshRate());
         this.map = map;
         this.running = false;
+        this.pov = new PointOfView(3d, 3d, Math.PI / 3, Math.PI / 3);
 
         // Add layers
         layers.add(new Renderer());
         layers.add(new RaycastingSkeleton(this));
         layers.add(new FPSCounter());
+
+        // Add controllers
+        setFocusable(true);
+        this.addKeyListener(new KeyboardListener(pov));
     }
 
     /**
