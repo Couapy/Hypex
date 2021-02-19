@@ -16,7 +16,7 @@
   <modules>
     <module>core</module>
     <module>client</module>
-    <module>server</module>
+    <module>network</module>
   </modules>
 
   <dependencies>

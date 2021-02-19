@@ -8,10 +8,10 @@
   </parent>
 
   <groupId>cloud.marchand.hypex</groupId>
-  <artifactId>server</artifactId>
+  <artifactId>network</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 
-  <name>server</name>
+  <name>network</name>
   <url>https://github.com/Couapy/hypex/</url>
 
   <properties>

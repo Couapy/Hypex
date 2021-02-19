@@ -1,4 +1,4 @@
-package cloud.marchand.hypex.server.server;
+package cloud.marchand.hypex.network.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -1,11 +1,11 @@
-package cloud.marchand.hypex.server.server;
+package cloud.marchand.hypex.network.server;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cloud.marchand.hypex.core.interfaces.PlayerInterface;
 import cloud.marchand.hypex.core.models.Game;
+import cloud.marchand.hypex.core.models.Player;
 import cloud.marchand.hypex.core.models.Team;
 
 public class ProtocolServer {
@@ -20,7 +20,7 @@ public class ProtocolServer {
         String instruction = data.split(":")[0];
         List<String> arguments = Arrays.asList(data.split(":"));
 
-        PlayerInterface player = con.getPlayer();
+        Player player = con.getPlayer();
 
         switch (instruction) {
             case "FIRE":

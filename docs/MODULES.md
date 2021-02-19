@@ -16,6 +16,6 @@ This module contains the graphical user interface : the default interface
 for lambda user.
 The client communicates with the server about the game and allow to play in multiplayer mode.
 
-### hypex.server
+### hypex.network
 
-The server side module create a game and handle players throught network.
+The network side module create a game and handle players throught network.

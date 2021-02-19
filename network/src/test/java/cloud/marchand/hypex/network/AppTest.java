@@ -1,4 +1,4 @@
-package cloud.marchand.hypex.server;
+package cloud.marchand.hypex.network;
 
 import static org.junit.Assert.assertTrue;
 

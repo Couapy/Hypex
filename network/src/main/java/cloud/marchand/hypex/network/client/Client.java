@@ -1,4 +1,4 @@
-package cloud.marchand.hypex.server.client;
+package cloud.marchand.hypex.network.client;
 
 import java.io.IOException;
 import java.io.PrintStream;

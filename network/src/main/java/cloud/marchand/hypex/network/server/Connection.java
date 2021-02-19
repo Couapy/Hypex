@@ -1,4 +1,4 @@
-package cloud.marchand.hypex.server.server;
+package cloud.marchand.hypex.network.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
-import cloud.marchand.hypex.core.interfaces.PlayerInterface;
+import cloud.marchand.hypex.core.models.Player;
 
 /**
  * Represent a connection with a client.
@@ -46,7 +46,7 @@ public class Connection extends Thread {
     /**
      * Player linked to this connection.
      */
-    private PlayerInterface player;
+    private Player player;
     
     /**
      * Instanciate the connection, and set up the input and output.
@@ -116,7 +116,7 @@ public class Connection extends Thread {
      * Give the player linked to this connection.
      * @return player object
      */
-	public PlayerInterface getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
     

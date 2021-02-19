@@ -1,4 +1,4 @@
-package cloud.marchand.hypex.server;
+package cloud.marchand.hypex.network;
 
 public class Protocol {
 
