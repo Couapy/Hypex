@@ -5,13 +5,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import cloud.marchand.hypex.core.enumerations.GameState;
-import cloud.marchand.hypex.core.interfaces.MapInterface;
-import cloud.marchand.hypex.core.interfaces.PlayerInterface;
 
 /**
  * Game of Hypex
  */
-public abstract class Game implements Runnable {
+public class Game implements Runnable {
 
     /**
      * Default refresh rate.
@@ -33,12 +31,12 @@ public abstract class Game implements Runnable {
     /**
      * Map of the game.
      */
-    private MapInterface map;
+    private Map map;
 
     /**
      * All players of the game.
      */
-    private Set<PlayerInterface> players = new HashSet<>();
+    private Set<Player> players = new HashSet<>();
 
     /**
      * Teams of players.
@@ -70,7 +68,7 @@ public abstract class Game implements Runnable {
     /**
      * Duration of starting state of the game.
      */
-    protected long gameStartingDuration = 2_000l;
+    protected long gameStartingDuration = 0_000l;
 
     /**
      * Duration of round running state of the game.
@@ -80,12 +78,12 @@ public abstract class Game implements Runnable {
     /**
      * Duration of round ended state of the game.
      */
-    protected long roundEndedDuration = 2_000l;
+    protected long roundEndedDuration = 0_000l;
 
     /**
      * Duration of game ended state of the game.
      */
-    protected long gameEndedDuration = 2_000l;
+    protected long gameEndedDuration = 0_000l;
 
     /**
      * Indicates if the players respawn during the round after dying.
@@ -114,20 +112,12 @@ public abstract class Game implements Runnable {
      */
     public Game(int refreshRate) {
         timer = new Timer(refreshRate);
-        Thread thread = new Thread(this);
-        thread.start();
     }
-
-    /**
-     * Defines the settings of the game.
-     */
-    protected abstract void initialize();
 
     /**
      * Intialize and execute the game.
      */
     public void run() {
-        initialize();
         setState(GameState.STARTING);
         round = 1;
         startRound = System.currentTimeMillis();
@@ -167,12 +157,17 @@ public abstract class Game implements Runnable {
             setState(GameState.ROUND_ENDED);
         }
 
-        Iterator<PlayerInterface> playerIterator = players.iterator();
-        while (playerIterator.hasNext()) {
-            PlayerInterface player = playerIterator.next();
-            player.handleMovements(timer.getRefreshRate());
-            player.handleWeapon();
+        Iterator<Team> teamIterator = teams.iterator();
+        while (teamIterator.hasNext()) {
+            Team team = teamIterator.next();
+            Iterator<Player> playerIterator = team.getPlayers().iterator();
+            while (playerIterator.hasNext()) {
+                Player player = playerIterator.next();
+                player.handleMovements(timer.getRefreshRate());
+                player.handleWeapon(teams, team, friendlyFire);
+            }
         }
+
     }
 
     /**
@@ -205,7 +200,7 @@ public abstract class Game implements Runnable {
     private void setState(GameState gameState) {
         startRound = System.currentTimeMillis();
         state = gameState;
-        System.out.println("[INFO][CORE][" + timer.getCurrentRefreshRate() + "] Game changed state : " + gameState);
+        System.out.println("[INFO][CORE] Game changed state : " + gameState);
 
         if (gameState == GameState.RUNNING) {
             round++;
@@ -237,7 +232,7 @@ public abstract class Game implements Runnable {
         return round >= maxRounds; // TODO
     }
 
-	public void onConnect(PlayerInterface player, Team team) {
+	public void onConnect(Player player, Team team) {
         for (Team t : teams) {
             t.removePlayer(player);
         }
@@ -246,13 +241,13 @@ public abstract class Game implements Runnable {
         }
     }
 
-    public void onDisconnect(PlayerInterface player) {
+    public void onDisconnect(Player player) {
         for (Team team : teams) {
             team.removePlayer(player);
         }
     }
     
-    public void onDeath(PlayerInterface player) {
+    public void onDeath(Player player) {
         // TODO
     }
 

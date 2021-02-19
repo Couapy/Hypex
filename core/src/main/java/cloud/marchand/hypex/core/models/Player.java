@@ -1,7 +1,8 @@
-package cloud.marchand.hypex.core.interfaces;
+package cloud.marchand.hypex.core.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import cloud.marchand.hypex.core.enumerations.PlayerState;
 import cloud.marchand.hypex.core.models.geom.OrientablePoint;
@@ -9,14 +10,14 @@ import cloud.marchand.hypex.core.models.geom.OrientablePoint;
 /**
  * Represent a player in the game
  */
-public abstract class PlayerInterface extends OrientablePoint {
+public class Player extends OrientablePoint {
 
     /**
      * Name of the player
      */
     private String name;
 
-    /**
+    /*
      * State of the player
      */
     private PlayerState state;
@@ -24,23 +25,18 @@ public abstract class PlayerInterface extends OrientablePoint {
     /**
      * A list of weapons that the player can use
      */
-    private List<WeaponInterface> weapons = new ArrayList<>();
+    private List<Weapon> weapons = new ArrayList<>();
 
     /**
      * Current weapon in hand.
      */
-    private WeaponInterface handWeapon;
+    private Weapon handWeapon;
 
     /**
      * Distance per second.
      */
     private double velocity;
 
-    /**
-     * Look direction.
-     */
-    private double theta;
-    
     /**
      * Indicates if the player is moving forward.
      */
@@ -64,15 +60,16 @@ public abstract class PlayerInterface extends OrientablePoint {
     /**
      * Create a player without name, at the origin
      */
-    public PlayerInterface() {
+    public Player() {
         this.name = "nameless";
     }
 
     /**
      * Create a player
+     * 
      * @param name of the player
      */
-    public PlayerInterface(String name) {
+    public Player(String name) {
         this.name = name;
     }
 
@@ -123,25 +120,28 @@ public abstract class PlayerInterface extends OrientablePoint {
 
     /**
      * Change the weapon in hand.
+     * 
      * @param index index of the weapon
      */
     public void changeWeapon(int index) {
-        try {
-            handWeapon = weapons.get(index);
+        Weapon weapon = weapons.get(index);
+        if (weapon != null) {
+            handWeapon = weapon;
             handWeapon.load();
-        } catch (IndexOutOfBoundsException e) {
         }
     }
 
     /**
      * Move the player every tick based on player velocity.
+     * 
+     * @param refreshRate refresh rate per second prefered
      */
-	public void handleMovements(double refreshRate) {
-        double[] vector = new double[]{0d, 0d};
+    public void handleMovements(double refreshRate) {
+        double[] vector = new double[] { 0d, 0d };
         double velocityRated = velocity / refreshRate;
-        double cos = Math.cos(theta);
-        double sin = Math.sin(theta);
-        
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+
         if (moveForward) {
             vector[0] += cos;
             vector[1] += sin;
@@ -161,20 +161,25 @@ public abstract class PlayerInterface extends OrientablePoint {
 
         x += vector[0] * velocityRated;
         y += vector[1] * velocityRated;
-	}
+    }
 
     /**
      * Handle weapon action
+     * 
+     * @param teams        all teams of the game
+     * @param myTeam       the team of the player
+     * @param friendlyFire true if the player can hurts mates
      * @see cloud.marchand.hypex.core.enumerations.WeaponState
      */
-	public void handleWeapon() {
+    public void handleWeapon(Set<Team> teams, Team myTeam, boolean friendlyFire) {
         if (handWeapon != null) {
-            handWeapon.handle();
+            handWeapon.handle(teams, myTeam, friendlyFire);
         }
-	}
-    
+    }
+
     /**
      * Defines player name.
+     * 
      * @param name pseudo
      */
     public void setName(String name) {
@@ -183,6 +188,7 @@ public abstract class PlayerInterface extends OrientablePoint {
 
     /**
      * Indicates if the player is moving forward.
+     * 
      * @param move true if the player is moving forward
      */
     public void moveForward(boolean move) {
@@ -191,6 +197,7 @@ public abstract class PlayerInterface extends OrientablePoint {
 
     /**
      * Indicates if the player is moving backward.
+     * 
      * @param move true if the player is moving backward
      */
     public void moveBackward(boolean move) {
@@ -199,6 +206,7 @@ public abstract class PlayerInterface extends OrientablePoint {
 
     /**
      * Indicates if the player is moving to the left.
+     * 
      * @param move true if the player is moving to the left
      */
     public void moveLeft(boolean move) {
@@ -207,6 +215,7 @@ public abstract class PlayerInterface extends OrientablePoint {
 
     /**
      * Indicates if the player is moving to the right.
+     * 
      * @param move true if the player is moving to the right
      */
     public void moveRight(boolean move) {
@@ -214,7 +223,8 @@ public abstract class PlayerInterface extends OrientablePoint {
     }
 
     /**
-     * Giv the player name.
+     * Give the player name.
+     * 
      * @return name
      */
     public String getName() {

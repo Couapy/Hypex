@@ -1,9 +1,5 @@
 package cloud.marchand.hypex.core.models.geom;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Represent a segment between two points.
  * 
@@ -12,14 +8,14 @@ import java.util.List;
 public class Segment {
 
     /**
-     * First point, A.
+     * First point.
      */
-    public Point p1;
+    public Point a;
 
     /**
-     * Second point B.
+     * Second point
      */
-    public Point p2;
+    public Point b;
 
     /**
      * Create a segment from two points.
@@ -28,95 +24,61 @@ public class Segment {
      * @param b second point
      */
     public Segment(Point a, Point b) {
-        p1 = a;
-        p2 = b;
+        this.a = a;
+        this.b = b;
     }
 
     /**
-     * Give the intersection of segments.
+     * Get intersection point with an other segment.
      * 
-     * @param segment other segment to intersect
-     * @return the intersection point, or null if there isn't
+     * @param ray other segment
+     * @return intersection point
      */
-    public Point getIntersectionPoint(Segment segment) {
-        // Colinerarity
-        Point vA = new Point(p2.x - p1.x, p2.y - p1.y);
-        Point vB = new Point(segment.p2.x - segment.p1.x, segment.p2.y - segment.p1.y);
-
-        double product = vA.x * vB.y - vA.y * vB.x;
-        if (product == 0d) {
+    public Point intersect(Segment ray) {
+        // Avoid parallel segments
+        Point vr = ray.getVertex();
+        Point vs = this.getVertex();
+        double dotProduct = vr.x * vs.y - vr.y * vs.x;
+        if (dotProduct == 0d) {
             return null;
         }
 
-        // Intersection
-        // Avoid vertical functions
-        if (vA.x == 0d) {
-            LinearFunction lineB = new LinearFunction(segment.p1, segment.p2);
-            return lineB.evaluate(p1.x);
-        } else if (vB.x == 0d) {
-            LinearFunction lineA = new LinearFunction(p1, p2);
-            return lineA.evaluate(segment.p1.x);
-        } else {
-            LinearFunction lineA = new LinearFunction(p1, p2);
-            return lineA.getIntersectionPoint(segment);
+        double t2 = (vr.x * (a.y - ray.a.y) + vr.y * (ray.a.x - a.x)) / (vs.x * vr.y - vs.y * vr.x);
+        double t1 = (a.x + vs.x * t2 - ray.a.x) / vr.x;
+        if (t1 < 0 || t2 < 0 || t2 > 1) {
+            return null;
         }
+
+        return new Point(ray.a.x + vr.x * t1, ray.a.y + vr.y * t1);
     }
 
     /**
-     * Indicates if the point belongs to the segment.
+     * Get the segment as a vertex.
      * 
-     * @param point point to verify
-     * @return true if the point belongs to the segment
+     * @return the segment as a vertex
      */
-    public boolean pointBelongTo(Point point) { // Write tests
-        return Math.min(p1.x, p2.x) <= point.x && point.x <= Math.max(p1.x, p2.x) && Math.min(p1.y, p2.y) <= point.y
-                && point.y <= Math.max(p1.y, p2.y);
+    public Point getVertex() {
+        return new Point(b.x - a.x, b.y - a.y);
     }
 
     /**
-     * Defines the first point.
+     * Get the angle of the segment;
      * 
-     * @param p1 first point
-     */
-    public void setPoint1(Point p1) {
-        this.p1 = p1;
-    }
-
-    /**
-     * Defines the second point.
-     * 
-     * @param p2 second point
-     */
-    public void setPoint2(Point p2) {
-        this.p2 = p2;
-    }
-
-    /**
-     * Get the segment points in a list.
-     * 
-     * @return a list of points
-     */
-    public List<Point> getPoints() {
-        return new ArrayList<>(Arrays.asList(new Point[] { p1, p2 }));
-    }
-
-    /**
-     * Get the segment as a vector.
-     * 
-     * @return vector
-     */
-    public Point asVector() {
-        return new Point(p2.x - p1.x, p2.y - p1.y);
-    }
-
-    /**
-     * Return the angle of the segment with x axis.
-     * 
-     * @return angle in radians
+     * @return angle between -PI and PI
      */
     public double getAngle() {
-        Point p = new Point(p2.x - p1.x, p2.y - p1.y);
-        return Math.atan2(p.y, p.x);
+        Point vertex = getVertex();
+        return Math.atan2(vertex.y, vertex.x);
+    }
+
+    /**
+     * Make readable the object.
+     * 
+     * @return human readable description
+     */
+    @Override
+    public String toString() {
+        return "[" + a + ", " + b + "]";
     }
 
 }

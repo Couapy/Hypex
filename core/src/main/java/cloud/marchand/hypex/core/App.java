@@ -5,11 +5,8 @@ import cloud.marchand.hypex.core.models.Game;
 public class App {
 
     public static void main(String[] args) {
-        new Game(96){
-            @Override
-            protected void initialize() {
-            }
-        };
+        Game game = new Game(96);
+        game.run();
     }
     
 }

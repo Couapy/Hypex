@@ -1,8 +1,11 @@
-package cloud.marchand.hypex.core.interfaces;
+package cloud.marchand.hypex.core.models;
+
+import java.util.Iterator;
+import java.util.Set;
 
 import cloud.marchand.hypex.core.enumerations.WeaponState;
 
-public abstract class WeaponInterface {
+public class Weapon {
 
     /**
      * The name of the weapon.
@@ -69,11 +72,9 @@ public abstract class WeaponInterface {
     /**
      * Create a weapon.
      */
-    public WeaponInterface() {
+    public Weapon() {
         this.state = WeaponState.LOADING;
     }
-
-    public abstract void secondaryShoot();
 
     /**
      * Set the weapon loading. Happens when the player select the weapon.
@@ -120,34 +121,79 @@ public abstract class WeaponInterface {
     /**
      * Handle the weapon's action.
      */
-    public void handle() {
+    public void handle(Set<Team> teams, Team myTeam, boolean friendlyFire) {
         if (state == WeaponState.LOADING) {
-            if (lastTimeChangedState + timeLoad <= System.currentTimeMillis()) {
-                setState(WeaponState.READY);
-            }
+            handleLoading();
         } else if (state == WeaponState.READY) {
-            if (primaryShootActived || secondaryShootActived) {
-                setState(WeaponState.FIRING);
-            }
+            handleReady();
         } else if (state == WeaponState.FIRING) {
-            if (bulletsMagazine == 0) {
-                return;
-            }
-            if (lastTimeChangedState + (1_000l / fireRate) >= System.currentTimeMillis()) {
-                setState(WeaponState.FIRING);
-                bulletsMagazine--;
+            handleFiring(teams, myTeam, friendlyFire);
+        } else if (state == WeaponState.RELOADING) {
+            handleReloading();
+        }
+    }
+
+    /**
+     * Handle loading state.
+     */
+    public void handleLoading() {
+        if (lastTimeChangedState + timeLoad <= System.currentTimeMillis()) {
+            setState(WeaponState.READY);
+        }
+    }
+
+    /**
+     * Handle ready state.
+     */
+    public void handleReady() {
+        if (primaryShootActived || secondaryShootActived) {
+            setState(WeaponState.FIRING);
+        }
+    }
+
+    /**
+     * Handle firing state.
+     * 
+     * @param teams        all teams of the game
+     * @param myTeam       the team of the player
+     * @param friendlyFire true if the player can hurts mates
+     */
+    public void handleFiring(Set<Team> teams, Team myTeam, boolean friendlyFire) {
+        if (bulletsMagazine == 0) {
+            return;
+        }
+        if (!primaryShootActived && !secondaryShootActived) {
+            setState(WeaponState.READY);
+            return;
+        }
+        if (lastTimeChangedState + (1_000l / fireRate) >= System.currentTimeMillis()) {
+            setState(WeaponState.FIRING);
+            bulletsMagazine--;
+
+            Iterator<Team> teamIterator = teams.iterator();
+            while (teamIterator.hasNext()) {
+                Team team = teamIterator.next();
+                if (!friendlyFire && team == myTeam) {
+                    continue;
+                }
+                Iterator<Player> playerIterator = team.getPlayers().iterator();
                 // TODO: give damage to others players
             }
-        } else if (state == WeaponState.RELOADING) {
-            if (lastTimeChangedState + timeReload <= System.currentTimeMillis()) {
-                setState(WeaponState.READY);
-                if (bulletsSupply < magazineCapacity) {
-                    bulletsMagazine = bulletsSupply;
-                    bulletsSupply = 0;
-                } else {
-                    bulletsMagazine = magazineCapacity;
-                    bulletsSupply -= magazineCapacity;
-                }
+        }
+    }
+
+    /**
+     * Handle the reloading state.
+     */
+    public void handleReloading() {
+        if (lastTimeChangedState + timeReload <= System.currentTimeMillis()) {
+            setState(WeaponState.READY);
+            if (bulletsSupply < magazineCapacity) {
+                bulletsMagazine = bulletsSupply;
+                bulletsSupply = 0;
+            } else {
+                bulletsMagazine = magazineCapacity;
+                bulletsSupply -= magazineCapacity;
             }
         }
     }

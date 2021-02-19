@@ -3,7 +3,6 @@ package cloud.marchand.hypex.core.models;
 import java.util.HashSet;
 import java.util.Set;
 
-import cloud.marchand.hypex.core.interfaces.PlayerInterface;
 
 /**
  * Team of players.
@@ -13,7 +12,7 @@ public class Team {
     /**
      * Players in the team.
      */
-    private Set<PlayerInterface> members = new HashSet<>();
+    private Set<Player> players = new HashSet<>();
 
     /**
      * Current score of the team.
@@ -26,8 +25,8 @@ public class Team {
      * @param player new player
      * @return true if success
      */
-    public synchronized boolean addPlayer(PlayerInterface player) {
-        return members.add(player);
+    public synchronized boolean addPlayer(Player player) {
+        return players.add(player);
     }
 
     /**
@@ -35,8 +34,8 @@ public class Team {
      * @param player player removed
      * @return true if success
      */
-    public synchronized boolean removePlayer(PlayerInterface player) {
-        return members.remove(player);
+    public synchronized boolean removePlayer(Player player) {
+        return players.remove(player);
     }
     
     /**
@@ -53,6 +52,14 @@ public class Team {
      */
     public void setScore(int score) {
         this.score = score;
+    }
+
+    /**
+     * Give the players in the team.
+     * @return player set
+     */
+    public synchronized Set<Player> getPlayers() {
+        return players;
     }
 
 }
