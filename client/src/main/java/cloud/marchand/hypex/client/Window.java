@@ -4,12 +4,12 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import cloud.marchand.hypex.client.listener.window.ResizeController;
 import cloud.marchand.hypex.client.interfaces.Vue;
 import cloud.marchand.hypex.client.listener.window.KeyboardController;
+import cloud.marchand.hypex.client.listener.window.ResizeController;
 
 /**
- * Graphical interface displaying a vue.
+ * Graphical user interface displaying a vue.
  */
 @SuppressWarnings("serial")
 public class Window extends JFrame {
@@ -53,9 +53,9 @@ public class Window extends JFrame {
             this.vue.load();
             add(vue);
             vue.setBounds(0, 0, getWidth(), getHeight());
+            revalidate();
+            repaint();
         }
-        revalidate();
-        repaint();
     }
 
     /**
@@ -71,12 +71,12 @@ public class Window extends JFrame {
         if (vue != null) {
             if (visible) {
                 vue.load();
+                revalidate();
+                repaint();
             } else {
                 vue.unload();
             }
         }
-        revalidate();
-        repaint();
     }
 
 }

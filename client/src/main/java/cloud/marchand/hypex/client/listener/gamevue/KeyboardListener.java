@@ -3,17 +3,17 @@ package cloud.marchand.hypex.client.listener.gamevue;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import cloud.marchand.hypex.core.models.geom.PointOfView;
+import cloud.marchand.hypex.client.Pov;
 
 
 public class KeyboardListener extends KeyAdapter {
 
-    private PointOfView pov;
+    private Pov pov;
 
     private static final double POSITION_THRESHOLD = 0.5d;
     private static final double ANGLE_THRESHOLD = Math.PI / 6;
 
-    public KeyboardListener(PointOfView pov) {
+    public KeyboardListener(Pov pov) {
         this.pov = pov;
     }
 
@@ -39,7 +39,6 @@ public class KeyboardListener extends KeyAdapter {
     @Override
     public void keyReleased(KeyEvent e) {
         // TODO Auto-generated method stub
-
     }
 
 }

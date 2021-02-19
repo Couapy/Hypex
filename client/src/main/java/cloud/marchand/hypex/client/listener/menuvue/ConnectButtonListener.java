@@ -15,7 +15,7 @@ public class ConnectButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        app.connectServer();
+        // app.connectServer();
     }
 
 }

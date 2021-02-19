@@ -8,16 +8,15 @@ import java.util.Iterator;
 import java.util.Set;
 
 import cloud.marchand.hypex.client.App;
-import cloud.marchand.hypex.client.interfaces.Layer;
+import cloud.marchand.hypex.client.Pov;
+import cloud.marchand.hypex.client.interfaces.CanvasLayer;
 import cloud.marchand.hypex.client.interfaces.Vue;
+import cloud.marchand.hypex.client.layer.gamevue.EnvironnementLayer;
 import cloud.marchand.hypex.client.layer.gamevue.FPSCounter;
-import cloud.marchand.hypex.client.layer.gamevue.RaycastingSkeleton;
-import cloud.marchand.hypex.client.layer.gamevue.MapRenderer;
-import cloud.marchand.hypex.client.layer.gamevue.Raycasting;
+import cloud.marchand.hypex.client.layer.gamevue.RaycastingLayer;
 import cloud.marchand.hypex.client.listener.gamevue.KeyboardListener;
-import cloud.marchand.hypex.client.map.Map;
+import cloud.marchand.hypex.core.models.Map;
 import cloud.marchand.hypex.core.models.Timer;
-import cloud.marchand.hypex.core.models.geom.PointOfView;
 
 /**
  * Game vue.
@@ -35,31 +34,30 @@ public class GameVue extends Vue implements Runnable {
     /**
      * Layers of the drawing.
      */
-    protected Set<Layer> layers = new HashSet<>();
+    protected Set<CanvasLayer> layers = new HashSet<>();
 
     private boolean running;
 
     private Timer timer;
 
-    public PointOfView pov;
+    public Pov pov;
 
     /**
      * Instanciate a canvas.
      * 
      * @param map map to display
      */
-    public GameVue(App app, Map map) {
+    public GameVue(App app, Map map, Pov pov) {
         super(app);
         this.timer = new Timer(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
                 .getDisplayMode().getRefreshRate());
         this.map = map;
         this.running = false;
-        this.pov = new PointOfView(3d, 3d, Math.PI / 3, Math.PI / 3);
+        this.pov = pov;
 
         // Add layers
-        // layers.add(new MapRenderer());
-        // layers.add(new RaycastingSkeleton(this));
-        layers.add(new Raycasting(this));
+        layers.add(new EnvironnementLayer(this));
+        layers.add(new RaycastingLayer(this, map, pov));
         layers.add(new FPSCounter());
 
         // Add controllers
@@ -76,10 +74,10 @@ public class GameVue extends Vue implements Runnable {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         setBackground(BACKGROUND_COLOR);
-        Iterator<Layer> iterator = layers.iterator();
+        Iterator<CanvasLayer> iterator = layers.iterator();
         while (iterator.hasNext()) {
-            Layer overlay = iterator.next();
-            overlay.draw(graphics, map);
+            CanvasLayer overlay = iterator.next();
+            overlay.draw(graphics);
         }
     }
 

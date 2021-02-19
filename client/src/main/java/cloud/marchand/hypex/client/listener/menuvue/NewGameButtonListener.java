@@ -15,7 +15,7 @@ public class NewGameButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        app.createGame();
+        // app.createGame();
     }
     
 }

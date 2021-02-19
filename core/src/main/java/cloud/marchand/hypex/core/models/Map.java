@@ -65,7 +65,7 @@ public class Map {
                 map.segments.add(new Segment(map.points.get(Integer.parseInt(arguments[0])),
                         map.points.get(Integer.parseInt(arguments[1]))));
             } else if (indicator.equals("o")) {
-                map.origin = new Point(Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1]));
+                map.setOrigin(new Point(Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1])));
             }
         }
 
@@ -93,6 +93,60 @@ public class Map {
             }
         }
         return closest;
+    }
+
+    /**
+     * Give the origin point.
+     * 
+     * @return origin point
+     */
+    public Point getOrigin() {
+        return origin;
+    }
+
+    /**
+     * Defines the origin point.
+     * 
+     * @param origin new origin point
+     */
+    public void setOrigin(Point origin) {
+        this.origin = origin;
+    }
+
+    /**
+     * Give a point set.
+     * 
+     * @return point set
+     */
+    public List<Point> getPoints() {
+        return points;
+    }
+
+    /**
+     * Defines the points set.
+     * 
+     * @param points new points set
+     */
+    public void setPoints(List<Point> points) {
+        this.points = points;
+    }
+
+    /**
+     * Give a segment set.
+     * 
+     * @return segment set
+     */
+    public List<Segment> getSegments() {
+        return segments;
+    }
+
+    /**
+     * Defines the segment set.
+     * 
+     * @param segments new segment set
+     */
+    public void setSegments(List<Segment> segments) {
+        this.segments = segments;
     }
 
 }

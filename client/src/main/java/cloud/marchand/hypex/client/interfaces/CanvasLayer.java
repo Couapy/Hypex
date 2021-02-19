@@ -2,12 +2,13 @@ package cloud.marchand.hypex.client.interfaces;
 
 import java.awt.Graphics;
 
-import cloud.marchand.hypex.client.map.Map;
+import cloud.marchand.hypex.client.Pov;
+import cloud.marchand.hypex.core.models.Map;
 
 /**
  * Layer of a drawing zone.
  */
-public abstract class Layer {
+public abstract class CanvasLayer {
 
     /**
      * Indicates if the overlay need the mouse focus.
@@ -22,7 +23,7 @@ public abstract class Layer {
     /**
      * Create a new overlay instance.
      */
-    protected Layer() {
+    protected CanvasLayer() {
         mouseFocus = false;
         keyboardFocus = false;
     }
@@ -30,8 +31,7 @@ public abstract class Layer {
     /**
      * Draw the overlay on the drawing zone.
      * @param graphics graphical zone to draw in
-     * @param map map to draw in
      */
-    public abstract void draw(Graphics graphics, Map map);
+    public abstract void draw(Graphics graphics);
     
 }
