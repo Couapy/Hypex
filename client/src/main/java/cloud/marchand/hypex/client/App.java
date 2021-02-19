@@ -3,22 +3,57 @@ package cloud.marchand.hypex.client;
 import java.awt.Dimension;
 import java.io.IOException;
 
-import cloud.marchand.hypex.client.layer.FPSCounter;
-import cloud.marchand.hypex.client.layer.RaycastingSkeleton;
-import cloud.marchand.hypex.client.layer.Renderer;
-import cloud.marchand.hypex.client.map.Map;
-import cloud.marchand.hypex.client.map.TilledMap;
+import cloud.marchand.hypex.client.vues.GameVue;
+import cloud.marchand.hypex.client.vues.MenuVue;
+import cloud.marchand.hypex.core.models.Map;
 
+/**
+ * Main application of Hypex game.
+ */
 public class App {
 
-    public static void main(String[] args) throws IOException {
-        Map map = new TilledMap("testMap.txt");
-        Canvas canvas2D = new Canvas(map);
-        canvas2D.addLayer(new Renderer());
-        canvas2D.addLayer(new RaycastingSkeleton(canvas2D));
-        canvas2D.addLayer(new FPSCounter());
-        Window window2D = new Window(new Dimension(1440, 1024), canvas2D);
-        window2D.setVisible(true);
+    /**
+     * Graphical user interface.
+     */
+    private Window window;
+
+    /**
+     * Launch a new instance of the game.
+     */
+    public App() {
+        Dimension windowSize = new Dimension(960, 720);
+        window = new Window(windowSize);
+        window.setVue(new MenuVue(this));
+        window.setVisible(true);
+    }
+
+    /**
+     * Get the window object of the current instance.
+     * 
+     * @return JFrame object
+     */
+    public Window getWindow() {
+        return window;
+    }
+
+    /**
+     * Main entry point.
+     * 
+     * @param args arguments for the program
+     */
+    public static void main(String[] args) {
+        App app = new App();
+        if (args.length > 0 && args[0].equals("--debug")) {
+            Map map;
+            try {
+                map = Map.fromFile("maps/anarchy.txt");
+                Pov pov = new Pov(map.getOrigin());
+                app.getWindow().setVue(new GameVue(app, map, pov));
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
     }
 
 }

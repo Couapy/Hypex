@@ -1,59 +1,82 @@
 package cloud.marchand.hypex.client;
 
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
-import cloud.marchand.hypex.client.controller.KeyboardController;
-import cloud.marchand.hypex.client.controller.ResizeController;
-import cloud.marchand.hypex.core.models.Timer;
+import cloud.marchand.hypex.client.interfaces.Vue;
+import cloud.marchand.hypex.client.listener.window.KeyboardController;
+import cloud.marchand.hypex.client.listener.window.ResizeController;
 
-
+/**
+ * Graphical user interface displaying a vue.
+ */
 @SuppressWarnings("serial")
-public class Window extends JFrame implements Runnable {
+public class Window extends JFrame {
 
-    private Timer timer;
-    private Canvas canvas;
+    /**
+     * Current vue displayed.
+     */
+    private Vue vue;
 
-    public Window(Dimension dimension, Canvas canvas) {
-        this.timer = new Timer(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate());
-        this.canvas = canvas;
-
-        initialize(dimension);
-        
-        Thread thread = new Thread(this);
-        thread.start();
-    }
-
-    private void initialize(Dimension dimension) {
+    /**
+     * Initialize a window from a size.
+     * 
+     * @param dimension size of the window
+     * @param vue current vue
+     */
+    public Window(Dimension dimension) {
         // Configuration
-        setTitle("Map Visualizer");
+        setTitle("hypex");
         setSize(dimension);
         setLayout(null);
         setResizable(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Add canvas
-        add(canvas);
-        canvas.setBounds(0, 0, getWidth(), getHeight());
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // Add controllers
         this.addComponentListener(new ResizeController(this));
         this.addKeyListener(new KeyboardController());
     }
 
-    @Override
-    public void run() {
-        while (true) {
-            timer.limitRefreshRate();
+    /**
+     * Defines the current vue.
+     * 
+     * @param vue current vue
+     */
+    public void setVue(Vue vue) {
+        if (vue != null) {
+            if (this.vue != null) {
+                this.vue.unload();
+                remove(this.vue);
+            }
+            this.vue = vue;
+            this.vue.load();
+            add(vue);
+            vue.setBounds(0, 0, getWidth(), getHeight());
             revalidate();
             repaint();
         }
     }
 
-    public Canvas getCanvas() {
-        return canvas;
+    /**
+     * Get the current view.
+     */
+    public Vue getVue() {
+        return vue;
     }
-    
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (vue != null) {
+            if (visible) {
+                vue.load();
+                revalidate();
+                repaint();
+            } else {
+                vue.unload();
+            }
+        }
+    }
+
 }
