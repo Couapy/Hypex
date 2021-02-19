@@ -11,7 +11,7 @@ import cloud.marchand.hypex.core.models.geom.Segment;
 /**
  * Render the map.
  */
-public class Renderer extends Layer {
+public class MapRenderer extends Layer {
 
     /**
      * Number of pixel for drawing a point.
@@ -21,7 +21,7 @@ public class Renderer extends Layer {
     /**
      * Number of pixels displayed for one unit.
      */
-    public static final int WIDTH_SQUARE = 100;
+    public static final int WIDTH_SQUARE = 75;
 
     /**
      * Draw map.

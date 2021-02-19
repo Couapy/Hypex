@@ -35,12 +35,28 @@ public abstract class Map {
     }
 
     /**
+     * Defines new set of points.
+     * @param points new set of points
+     */
+    public void setPoints(Set<Point> points) {
+        this.points = points;
+    }
+
+    /**
      * Get nodes of map instance.
      * 
      * @return nodes
      */
     public Set<Point> getPoints() {
         return points;
+    }
+
+    /**
+     * Defines new set of segments.
+     * @param segments new set of segments
+     */
+    public void setSegments(Set<Segment> segments) {
+        this.segments = segments;
     }
 
     /**
@@ -60,9 +76,15 @@ public abstract class Map {
      * @return intersection point, if none, null is returned
      */
     public Point getProjection(Point point, double angle) {
-        Point orientedPoint = new Point(point.x + Math.cos(angle), point.y + Math.sin(angle));
-        LinearFunction line = new LinearFunction(point, orientedPoint);
         List<Point> intersections = new ArrayList<>();
+        Point orientedPoint = new Point(point.x + Math.cos(angle), point.y + Math.sin(angle));
+        LinearFunction line;
+        if (Math.abs(angle % Math.PI) == (Math.PI / 2)) {
+            line = new LinearFunction(9_999_999_999d, 0d);
+        }
+        else {
+            line = new LinearFunction(point, orientedPoint);
+        }
 
         for (Segment segment : segments) {
             Point intersection = line.getIntersectionPoint(segment);

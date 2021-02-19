@@ -3,34 +3,35 @@ package cloud.marchand.hypex.client;
 import java.awt.Dimension;
 import java.io.IOException;
 
-import cloud.marchand.hypex.client.interfaces.Vue;
 import cloud.marchand.hypex.client.map.Map;
 import cloud.marchand.hypex.client.map.TilledMap;
 import cloud.marchand.hypex.client.vues.ConnectionVue;
 import cloud.marchand.hypex.client.vues.CreateGameVue;
+import cloud.marchand.hypex.client.vues.Game2DVue;
 import cloud.marchand.hypex.client.vues.GameVue;
-import cloud.marchand.hypex.client.vues.MenuVue;
 import cloud.marchand.hypex.core.interfaces.PlayerInterface;
 import cloud.marchand.hypex.core.models.Game;
 
 public class App {
 
     public static void main(String[] args) throws IOException {
-        App application = new App();
-        if (args.length != 0 && args[0].equals("--debug")) {
-            Map map = new TilledMap("testMap.txt");
-            Vue vue = new GameVue(application, map);
-            application.window.setVue(vue);
-        }
+        new App();
     }
 
     private Window window;
 
     public App() throws IOException {
-        Vue vue = new MenuVue(this);
-        window = new Window(new Dimension(1440, 1024));
-        window.setVue(vue);
+        Dimension windowSize = new Dimension(960, 720);
+        Map map = new TilledMap("testMap.txt");
+        window = new Window(windowSize);
+        window.setVue(new GameVue(this, map));
         window.setVisible(true);
+
+        Game2DVue vue2D = new Game2DVue(this, map);
+        vue2D.pov = ((GameVue)window.getVue()).pov;
+        Window window2D = new Window(windowSize);
+        window2D.setVue(vue2D);
+        window2D.setVisible(true);
     }
 
     /**
