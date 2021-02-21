@@ -63,7 +63,7 @@ public class ProtocolServer {
                 con.closeConnection();
                 break;
             default:
-                System.out.println("[SERVER][" + con.getName() + "][PROTOCOL] Unknow instruction : " + instruction);
+                System.out.println("[WARN][" + con.getName() + "] > " + instruction);
                 break;
         }
     }

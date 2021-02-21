@@ -47,14 +47,16 @@ public class Connection extends Thread {
      * Player linked to this connection.
      */
     private Player player;
-    
+
     /**
      * Instanciate the connection, and set up the input and output.
+     * 
      * @param socket client socket
      */
     public Connection(Socket socket, ProtocolServer protocol) {
         numberConnections++;
         setName("Player#" + numberConnections);
+        System.out.println("[INFO][" + getName() + "] " + socket.getInetAddress() + " connected.");
         this.socket = socket;
         this.protocol = protocol;
         try {
@@ -63,22 +65,20 @@ public class Connection extends Thread {
         } catch (IOException e) {
             closeConnection();
         }
-        System.out.println("[INFO][" + getName() + "] " + socket.getInetAddress() + " connected.");
         start();
     }
 
     /**
      * Handler data sended.
      */
+    @Override
     public void run() {
         String data;
         while (active) {
             try {
-                Thread.sleep(10);
                 while ((data = input.readLine()) != null) {
                     protocol.parse(this, data);
                 }
-            } catch (InterruptedException e) {
             } catch (IOException e) {
                 closeConnection();
             }
@@ -87,6 +87,7 @@ public class Connection extends Thread {
 
     /**
      * Send a message through the socket.
+     * 
      * @param message message to deliver
      */
     public void send(String message) {
@@ -97,27 +98,41 @@ public class Connection extends Thread {
      * Close connection with client.
      */
     public void closeConnection() {
-        if (socket.isClosed()) {
+        if (socket == null || socket.isClosed()) {
+            active = false;
             return;
         }
         try {
-            input.close();
-            output.close();
+            if (input != null) {
+                input.close();
+            }
+            if (output != null) {
+                output.close();
+            }
             socket.close();
         } catch (IOException e) {
-        }
-        finally {
+        } finally {
             active = false;
         }
         System.out.println("[INFO][" + getName() + "] " + socket.getInetAddress() + " disconnected.");
     }
 
     /**
+     * Indicates if a connection is alive
+     * 
+     * @return true if the connection is remaining
+     */
+    public boolean isConnected() {
+        return socket != null && !socket.isClosed();
+    }
+
+    /**
      * Give the player linked to this connection.
+     * 
      * @return player object
      */
-	public Player getPlayer() {
-		return player;
-	}
-    
+    public Player getPlayer() {
+        return player;
+    }
+
 }
