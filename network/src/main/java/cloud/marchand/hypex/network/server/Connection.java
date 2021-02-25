@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import cloud.marchand.hypex.core.models.Game;
 import cloud.marchand.hypex.core.models.Player;
 
 /**
@@ -39,9 +40,14 @@ public class Connection extends Thread {
     private boolean active = true;
 
     /**
-     * Current protocol of communication.
+     * Server-side protocol of communication.
      */
-    private ProtocolServer protocol;
+    private ProtocolDecoder decoder;
+
+    /**
+     * Client-side protocol of communication.
+     */
+    private ProtocolEncoder encoder;
 
     /**
      * Player linked to this connection.
@@ -53,12 +59,16 @@ public class Connection extends Thread {
      * 
      * @param socket client socket
      */
-    public Connection(Socket socket, ProtocolServer protocol) {
+    public Connection(Socket socket, Game game) {
         numberConnections++;
         setName("Player#" + numberConnections);
         System.out.println("[INFO][" + getName() + "] " + socket.getInetAddress() + " connected.");
+
         this.socket = socket;
-        this.protocol = protocol;
+        this.player = new Player();
+        this.decoder = new ProtocolDecoder(this, game);
+        this.encoder = new ProtocolEncoder(this, game);
+
         try {
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintStream(socket.getOutputStream());
@@ -74,10 +84,11 @@ public class Connection extends Thread {
     @Override
     public void run() {
         String data;
+        encoder.sendMap();
         while (active) {
             try {
                 while ((data = input.readLine()) != null) {
-                    protocol.parse(this, data);
+                    decoder.decode(data);
                 }
             } catch (IOException e) {
                 closeConnection();
@@ -114,7 +125,7 @@ public class Connection extends Thread {
         } finally {
             active = false;
         }
-        System.out.println("[INFO][" + getName() + "] " + socket.getInetAddress() + " disconnected.");
+        System.out.println("[INFO][" + player.getName() + "] " + socket.getInetAddress() + " disconnected.");
     }
 
     /**

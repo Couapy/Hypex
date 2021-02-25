@@ -122,13 +122,16 @@ public class Player extends OrientablePoint {
      * Change the weapon in hand.
      * 
      * @param index index of the weapon
+     * @return true if the index is correct
      */
-    public void changeWeapon(int index) {
-        Weapon weapon = weapons.get(index);
-        if (weapon != null) {
+    public boolean changeWeapon(int index) {
+        if (0 <= index && index < weapons.size()) {
+            Weapon weapon = weapons.get(index);
             handWeapon = weapon;
             handWeapon.load();
+            return true;
         }
+        return false;
     }
 
     /**

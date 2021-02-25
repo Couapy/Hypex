@@ -21,14 +21,11 @@ public class Server extends Thread {
 
     private Game game;
 
-    private ProtocolServer protocol;
-
     private List<Connection> connections;
 
-    public Server(Game game, int port, ProtocolServer protocol) {
+    public Server(Game game, int port) {
         this.game = game;
         this.port = port;
-        this.protocol = protocol;
         this.connections = new ArrayList<>();
         start();
     }
@@ -39,10 +36,11 @@ public class Server extends Thread {
             server = new ServerSocket(port);
             while (running && !server.isClosed()) {
                 Socket socket = server.accept();
-                connections.add(new Connection(socket, protocol));
+                connections.add(new Connection(socket, game));
 			}
             close();
         } catch (SocketException e) {
+            System.out.println("[ERROR][SERVER] Network error.");
         } catch (IOException e) {
             System.out.println("[ERROR][SERVER] Port " + port + " is already used.");
         }

@@ -2,6 +2,7 @@ package cloud.marchand.hypex.core.models;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import cloud.marchand.hypex.core.models.geom.Point;
@@ -147,6 +148,35 @@ public class Map {
      */
     public void setSegments(List<Segment> segments) {
         this.segments = segments;
+    }
+
+    /**
+     * Give the map definition.
+     * 
+     * @return map definition
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("o:" + origin.x + ";" + origin.y + "\n");
+
+        Iterator<Point> pIterator = points.iterator();
+        while (pIterator.hasNext()) {
+            Point point = pIterator.next();
+            builder.append("p:" + point.x + ";" + point.y + "\n");
+        }
+
+        Iterator<Segment> sIterator = segments.iterator();
+        while (sIterator.hasNext()) {
+            Segment segment = sIterator.next();
+            int index1 = points.indexOf(segment.a);
+            int index2 = points.indexOf(segment.b);
+            builder.append("p:" + index1 + ";" + index2 + "\n");
+        }
+
+        String res = builder.toString();
+        return res.substring(0, res.length() - 1);
     }
 
 }

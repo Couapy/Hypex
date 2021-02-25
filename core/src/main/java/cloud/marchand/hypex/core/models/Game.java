@@ -103,14 +103,15 @@ public class Game implements Runnable {
     /**
      * Create a default game.
      */
-    public Game() {
-        this(DEFAULT_REFRESH_RATE);
+    public Game(Map map) {
+        this(map, DEFAULT_REFRESH_RATE);
     }
 
     /**
      * Create a new game.
      */
-    public Game(int refreshRate) {
+    public Game(Map map, int refreshRate) {
+        this.map = map;
         timer = new Timer(refreshRate);
     }
 
@@ -260,6 +261,10 @@ public class Game implements Runnable {
             i++;
         }
         return null;
+	}
+
+	public Map getMap() {
+		return map;
 	}
 
 }

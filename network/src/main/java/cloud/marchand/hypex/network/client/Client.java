@@ -1,8 +1,10 @@
 package cloud.marchand.hypex.network.client;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
@@ -30,7 +32,7 @@ public class Client extends Thread {
 
     private Socket socket;
 
-    private InputStream input;
+    private BufferedReader input;
 
     private PrintStream output;
 
@@ -52,19 +54,26 @@ public class Client extends Thread {
     public void run() {
         connect(address, port);
         if (socket != null && socket.isConnected()) {
-            for (int i = 0; i < 10; i++) {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                }
-                output.println("Hello world ! " + i);
-            }
+            output.println("NAME:Couapy");
+            // output.println("FIRE:off;on");
+            // output.println("MOVE:f;l");
+            // output.println("TEAM:0");
+            // output.println("WEAPON:1");
+            // output.println("CONFIG");
             output.println("BYE");
+            String data;
             try {
-            output.close();
-            socket.close();
+                while ((data = input.readLine()) != null) {
+                    System.out.println(">> " + data);
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            try {
+                output.close();
+                socket.close();
             } catch (IOException e) {
-            e.printStackTrace();
+                e.printStackTrace();
             }
         }
     }
@@ -99,7 +108,7 @@ public class Client extends Thread {
         if (socket != null && socket.isConnected()) {
             try {
                 output = new PrintStream(socket.getOutputStream());
-                input = new BufferedInputStream(socket.getInputStream());
+                input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;

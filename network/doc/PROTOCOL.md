@@ -1,18 +1,30 @@
-# Communication Protocol
+# Network protocol
 
-All instructions are in uppercase. Instructions and arguments are separated by `:`.
-Arguments are separated by `;`.
+This is the definition of the network protocol.
 
-## Instuctions
+## Nomenclature
 
-The following instructions are available :
+First of all, each package of data send to the server, or to the client, must follow this nomenclature :
 
-* [FIRE](#fire)
-* [NAME](#name)
-* [MOVE](#move)
-* [SELECT](#select)
-* [TEAM](#team)
-* [CONFIGURATION](#configuration)
+```text
+header:body\n
+```
+
+So as you can see, each package of data represent a line in a stream.
+
+## Table of contents
+
+- [Network protocol](#network-protocol)
+  - [Nomenclature](#nomenclature)
+  - [Table of contents](#table-of-contents)
+    - [Fire](#fire)
+    - [Name](#name)
+    - [Map](#map)
+    - [Move](#move)
+    - [Team](#team)
+    - [Configuration](#configuration)
+    - [Weapon](#weapon)
+  - [Example](#example)
 
 ### Fire
 
@@ -24,14 +36,6 @@ second for special firing.
 FIRE:off;off
 FIRE:on;off
 FIRE:on;on
-```
-
-### Hello
-
-The `HELLO` instruction is only to engage the dialog between both parts.
-
-```text
-HELLO
 ```
 
 ### Name
@@ -51,6 +55,18 @@ NAME:Couapy
 NAME:My_Name-23
 ```
 
+### Map
+
+The `NAME` instruction allow to send a map to the client.
+
+Please refer to [MAPS.md](../../core/docs/MAPS.md) for map data.
+
+To respect the current nomenclature, line returns must replaced by comma `+`.
+
+```text
+MAP:<map data>
+```
+
 ### Move
 
 The `MOVE` instruction indicates what moves the player is doing.
@@ -68,17 +84,6 @@ MOVE:f;b;l;r
 MOVE:
 ```
 
-### Select
-
-`SELECT` instruction is usefull for selecting a weapon from its index in the player hand.
-
-```text
-SELECT:0
-SELECT:1
-SELECT:2
-SELECT:3
-```
-
 ### Team
 
 `TEAM` instruction is usefull for selecting a team from its index.
@@ -91,7 +96,7 @@ TEAM:1
 
 ### Configuration
 
-`CONFIGURATION` instruction is to ask informations about each other.
+`CONFIG` instruction is to ask informations about each other.
 
 Informations returned :
 
@@ -103,15 +108,26 @@ Informations returned :
 ```md
 # Server
 <!-- Ask -->
-CONFIGURATION:
+CONFIG:
 <!-- Answer -->
-CONFIGURATION:0.1.O,...
+CONFIG:0.1.O,...
 
 # Client
 <!-- Ask -->
-CONFIGURATION:
+CONFIG:
 <!-- Answer -->
-CONFIGURATION:0.1.O,...
+CONFIG:0.1.O,...
+```
+
+### Weapon
+
+`WEAPON` instruction is usefull for selecting a weapon from its index in the player hand.
+
+```text
+WEAPON:0
+WEAPON:1
+WEAPON:2
+WEAPON:3
 ```
 
 ## Example
@@ -119,8 +135,6 @@ CONFIGURATION:0.1.O,...
 `C>` represent the client side communication, and `S>` for the server side.
 
 ```text
-C> HELLO
-S> NAME:
 C> NAME:albator
 C> MOVE:f
 C> MOVE:f;b;l;r
