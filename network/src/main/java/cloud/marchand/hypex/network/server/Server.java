@@ -27,6 +27,7 @@ public class Server extends Thread {
         this.game = game;
         this.port = port;
         this.connections = new ArrayList<>();
+        setName("SERVER");
         start();
     }
 

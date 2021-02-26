@@ -52,10 +52,18 @@ public class Map {
      */
     public static Map fromFile(String filepath) throws IOException {
         String content = FileUtil.readFile(filepath);
+        return fromString(content);
+    }
+
+    /**
+     * Create a map from string.
+     * 
+     * @param data structured data
+     * @return the map object
+     */
+    public static Map fromString(String data) {
         Map map = new Map();
-
-        String[] lines = content.split("\n");
-
+        String[] lines = data.split("\n");
         for (int i = 0; i < lines.length; i++) {
             String[] line = lines[i].split(":");
             String indicator = line[0];
@@ -69,7 +77,6 @@ public class Map {
                 map.setOrigin(new Point(Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1])));
             }
         }
-
         return map;
     }
 
@@ -159,12 +166,12 @@ public class Map {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("o:" + origin.x + ";" + origin.y + "\n");
+        builder.append("o:" + (int) origin.x + ";" + (int) origin.y + "\n");
 
         Iterator<Point> pIterator = points.iterator();
         while (pIterator.hasNext()) {
             Point point = pIterator.next();
-            builder.append("p:" + point.x + ";" + point.y + "\n");
+            builder.append("p:" + (int) point.x + ";" + (int) point.y + "\n");
         }
 
         Iterator<Segment> sIterator = segments.iterator();

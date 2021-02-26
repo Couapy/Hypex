@@ -1,17 +1,19 @@
 package cloud.marchand.hypex.network.client;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+
+import cloud.marchand.hypex.core.models.Map;
 
 /**
  * Network client.
  */
 public class Client extends Thread {
+
+    private static int CLIENT_INSTANCES = 0;
 
     /**
      * Max attemps to connect to the server if fail.
@@ -30,11 +32,35 @@ public class Client extends Thread {
      */
     private int port;
 
+    /**
+     * Socket of the connection.
+     */
     private Socket socket;
 
+    /**
+     * Input stream.
+     */
     private BufferedReader input;
 
+    /**
+     * Output stream.
+     */
     private PrintStream output;
+
+    /**
+     * Client-side protocol of communication.
+     */
+    private ProtocolDecoder decoder;
+
+    /**
+     * Server-side protocol of communication.
+     */
+    private ProtocolEncoder encoder;
+
+    /**
+     * Map loaded by server.
+     */
+    private Map map;
 
     /**
      * Initialize client.
@@ -43,37 +69,30 @@ public class Client extends Thread {
      * @param port    server port
      */
     public Client(String address, int port) {
+        CLIENT_INSTANCES++;
+        setName("CLIENT#" + CLIENT_INSTANCES);
+
         this.address = address;
         this.port = port;
+        this.decoder = new ProtocolDecoder(this);
+        this.encoder = new ProtocolEncoder();
         start();
     }
 
     /**
      * Handle communication channels with the server.
      */
+    @Override
     public void run() {
         connect(address, port);
-        if (socket != null && socket.isConnected()) {
-            output.println("NAME:Couapy");
-            // output.println("FIRE:off;on");
-            // output.println("MOVE:f;l");
-            // output.println("TEAM:0");
-            // output.println("WEAPON:1");
-            // output.println("CONFIG");
-            output.println("BYE");
+        if (socket != null && !socket.isClosed()) {
             String data;
             try {
                 while ((data = input.readLine()) != null) {
-                    System.out.println(">> " + data);
+                    decoder.decode(data);
                 }
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            try {
-                output.close();
-                socket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                closeConnnection();
             }
         }
     }
@@ -100,8 +119,7 @@ public class Client extends Thread {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -113,11 +131,53 @@ public class Client extends Thread {
                 e.printStackTrace();
                 return false;
             }
-        }
-        else {
+        } else {
             System.out.println("[ERROR][CLIENT] Connection failed");
         }
         return true;
+    }
+
+    /**
+     * Close connection with server.
+     */
+    public void closeConnnection() {
+        if (socket == null || socket.isClosed()) {
+            return;
+        }
+        try {
+            output.println("BYE");
+            input.close();
+            output.close();
+            socket.close();
+        } catch (IOException e) {
+        }
+    }
+
+    /**
+     * Indicates if the client is ready to play.
+     * 
+     * @return true if the player can play
+     */
+    public boolean isReady() {
+        return map != null;
+    }
+
+    /**
+     * Give the map.
+     * 
+     * @return the map
+     */
+    public Map getMap() {
+        return map;
+    }
+
+    /**
+     * Defines a new map.
+     * 
+     * @param map current map
+     */
+    public void setMap(Map map) {
+        this.map = map;
     }
 
 }

@@ -27,7 +27,7 @@ public class ProtocolDecoder {
         if (fields.length < 2) {
             body = "";
         } else {
-             body = fields[1];
+            body = data.substring(header.length() + 1);
         }
 
         try {

@@ -114,6 +114,7 @@ public class Connection extends Thread {
             return;
         }
         try {
+            send("BYE");
             if (input != null) {
                 input.close();
             }
